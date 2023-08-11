@@ -1,0 +1,11 @@
+/node_modules
+/build
+.env
+
+# System Files
+.DS_Store
+Thumbs.db
+package-lock.json
+
+/src/lib/privae-1ce11372f052.json
+/src/data

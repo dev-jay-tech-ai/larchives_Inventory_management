@@ -1,0 +1,45 @@
+import Home from './pages/home/Home'
+import List from './pages/list/List';
+import Signup from "./pages/signup/Signup";
+import Signin from './pages/siginin/Signin'
+import Single from './pages/single/Single';
+import New from './pages/new/New';
+import Inventory from './pages/inventory/Inventory'
+import { 
+  BrowserRouter,
+  Routes,
+  Route
+} from 'react-router-dom'
+import Live from './pages/live/Live'
+import Stock from './pages/stock/Stock'
+import Modal from 'react-modal'
+import PrivateRoute from './PrivateRoute'
+
+const App = () => {
+  return (
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<PrivateRoute allowRedirect={true}><Home /></PrivateRoute>} />
+          <Route path="live" element={<PrivateRoute allowRedirect={true}><Live /></PrivateRoute>} />
+          <Route path="stocks" element={<PrivateRoute allowRedirect={true}><Stock /></PrivateRoute>} />
+          <Route path="inventories" element={<PrivateRoute allowRedirect={true}><Inventory /></PrivateRoute>} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="signin" element={<Signin />} />
+          <Route path="users" element={<PrivateRoute allowRedirect={true}><List /></PrivateRoute>}>
+            <Route path=":userId" element={<PrivateRoute allowRedirect={true}><Single /></PrivateRoute>} />
+            <Route path="new" />
+          </Route>
+          <Route path="products" element={<PrivateRoute allowRedirect={true}><List /></PrivateRoute>}>
+            <Route path=":productId" element={<PrivateRoute allowRedirect={true}><Single /></PrivateRoute>} />
+            <Route path="new" />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
+    );
+}
+
+export default App;
+
+Modal.setAppElement('#root')
