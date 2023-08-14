@@ -1,12 +1,20 @@
 import "./datatable.scss";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { userColumns, userRows } from "../../datatablesource/user";
+import { userColumns } from "../../datatablesource/user";
 import { CellRenderParams } from "../../types/datatable";
+import { useGetUsersQuery } from "../../hooks/userHooks";
+import LoadingBox from "../LoadingBox";
+import { MessageBox } from "../MessageBox";
+import { ApiError } from "../../types/ApiError";
+import { getError } from "../../utils";
 
 const Datatable = () => {
-  const [data, setData] = useState(userRows);
+  const { data: users, isLoading, error } = useGetUsersQuery()
+  const usersWithIds = users?.map((user) => ({
+    ...user,
+    id: user._id, 
+  })) ?? [];
 
   const actionColumn = [
     {
@@ -30,24 +38,26 @@ const Datatable = () => {
     },
   ];
 
-  return (
-    <div className="datatable">
-      <div className="datatableTitle">
-        Add New User
-        <Link to={'/users/new'} className="link">
-          Add New
-        </Link>
+  return isLoading ? <LoadingBox /> :
+    error ? <MessageBox>{getError(error as ApiError)}</MessageBox> :  
+    (
+      <div className="datatable">
+        <div className="datatableTitle">
+          Users and permissions
+          <Link to={'/users/new'} className="link">
+            Add New
+          </Link>
+        </div>
+        <DataGrid
+          className="datagrid"
+          rows={usersWithIds ?? []}
+          columns={userColumns.concat(actionColumn)}
+          pageSize={9}
+          rowsPerPageOptions={[9]}
+          checkboxSelection
+        />
       </div>
-      <DataGrid
-        className="datagrid"
-        rows={data}
-        columns={userColumns.concat(actionColumn)}
-        pageSize={9}
-        rowsPerPageOptions={[9]}
-        checkboxSelection
-      />
-    </div>
-  );
-};
+    )
+}
 
 export default Datatable

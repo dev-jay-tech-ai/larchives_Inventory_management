@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import { Store } from '../../Store'
-import { useLocation,  useNavigate } from 'react-router-dom'
+import { Link, useLocation,  useNavigate } from 'react-router-dom'
 import { useSignupMutation } from '../../hooks/userHooks'
 import { toast } from 'react-toastify'
 import { getError } from '../../utils'
 import { ApiError } from '../../types/ApiError'
+import { Button, Container, Form } from 'react-bootstrap'
 
 const Signup = () => {
   const navigate = useNavigate()
@@ -24,7 +25,7 @@ const Signup = () => {
     if(userInfo) navigate(redirect) 
   },[ navigate, redirect, userInfo ])
 
-  const { mutateAysnc: signup, isLoading } = useSignupMutation()
+  const { mutateAsync: signup, isLoading } = useSignupMutation()
   const submitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     if(password !== confirmPassword) {
@@ -44,7 +45,47 @@ const Signup = () => {
   }
 
   return (
-    <div>Sign up</div>
+    <Container className='small-container'>
+      <title>Sign Up</title>
+      <h1 className='my-3'>Sign Up</h1>
+      <Form onSubmit={submitHandler}>
+        <Form.Group className='mb-3' controlId='name'>
+          <Form.Label>Name</Form.Label>
+          <Form.Control onChange={(e) => setName(e.target.value)} required />
+        </Form.Group>
+        <Form.Group className='mb-3' controlId='email'>
+          <Form.Label>Email</Form.Label>
+          <Form.Control 
+            type='email' 
+            required
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group className='mb-3' controlId='password'>
+          <Form.Label>Password</Form.Label>
+          <Form.Control 
+            type='password'
+            required
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Form.Group>
+        <Form.Group className='mb-3' controlId='confirmPassword'>
+          <Form.Label>Confirm Password</Form.Label>
+          <Form.Control 
+            type='password'
+            required
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </Form.Group>
+        <div className='mb-3'>
+          <Button type='submit'>Sign Up</Button>
+        </div>
+        <div className='mb-3'>
+          Already have an account? {' '}
+          <Link to={`/signin?redirect=${redirect}`}>Sign In</Link>
+        </div>
+      </Form>
+    </Container>
   )
 
 }

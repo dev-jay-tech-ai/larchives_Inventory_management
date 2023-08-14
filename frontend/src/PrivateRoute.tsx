@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { Store } from './Store';
 
 interface PrivateRouteProps {
-  children ?: React.ReactElement
+  children: React.ReactElement
   allowRedirect: boolean
 }
 

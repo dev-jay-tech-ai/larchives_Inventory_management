@@ -10,9 +10,21 @@ const { SHOPIFY_API_KEY, SHOPIFY_LOCATION_ID, SHOPIFY_ACCESS_TOKEN } = process.e
 
 export const dbRouter = express.Router()
 
+const totalProductsJSON:Product[] = []
+const productsUrl = 'https://${SHOPIFY_API_KEY}:${SHOPIFY_ACCESS_TOKEN}@privaeuk.myshopify.com/admin/api/2023-04/'
 // Use the route handler for the /insert endpoint
 const insertProducts = async (req: Request, res: Response) => {
+  const options = {
+    'method' : 'GET',
+    'url' : productsUrl + 'products.json?limit=250',
+    'headers' : {
+    'Content-Type': 'application/json'
+    }
+  }
+
   try {
+    await makeRequest(options.url, 'products')
+    
     const dataBuffer = fs.readFileSync('products_250_7.json');
     const dataJSON: Request['ProductData'][] = JSON.parse(dataBuffer.toString()).products;
     // Loop through each product in dataJSON
@@ -74,12 +86,10 @@ const insertProduct = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 }
-
-const totalIventoryJSON:Inventory[] = [];
-const fistLink = 'inventory_levels.json?limit=250'
+const totalIventoryJSON:Inventory[] = []
 const inventoryUrl = `https://${SHOPIFY_API_KEY}:${SHOPIFY_ACCESS_TOKEN}@privaeuk.myshopify.com/admin/api/2023-04/locations/${SHOPIFY_LOCATION_ID}/`;
 
-const makeRequest = (link: string): Promise<void> => {
+const makeRequest = (link: string, target: string): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     const fetchNextLink = (nextLink: string) => {
       console.log('다음 이동 링크', nextLink)
@@ -88,39 +98,43 @@ const makeRequest = (link: string): Promise<void> => {
           reject(err); // Reject the promise if there's an error with the request
         } else {
           const responseBody = JSON.parse(resp.body);
-          const inventorysArray = responseBody.inventory_levels;
-          totalIventoryJSON.push(...inventorysArray);
-
+          let targetArray;
+          if(target === 'inventory') {
+            targetArray = responseBody.inventory_levels;
+            totalIventoryJSON.push(...targetArray);
+          } else {
+            targetArray = responseBody.inventory_levels;
+            totalProductsJSON.push(...targetArray);
+          }
           const headerLink = resp.headers['link'];
           const match = headerLink?.match(/<[^;]+\/(\w+\.json[^;]+)>;\srel="next"/);
-          const nextLink = match ? inventoryUrl + match[1] : false;
-
+          const nextLink = match ? 
+            target === 'inventory' ? inventoryUrl + match[1] : productsUrl + match[1]
+            : false;
           if (nextLink) {
             fetchNextLink(nextLink); // Fetch the next link recursively
           } else {
             resolve(); // Resolve the promise if there's no "next" link
           }
         }
-      });
-    };
+      })
+    }
     fetchNextLink(link); // Start fetching recursively from the provided link
-  });
-};
-
-
-const options = {
-  'method' : 'GET',
-  'url' : inventoryUrl + fistLink,
-  'headers' : {
-   'Content-Type': 'application/json'
-  }
+  })
 }
 
 const insertInventory = async (req: Request, res: Response) => {
-  console.log('hello')
+  const options = {
+    'method' : 'GET',
+    'url' : inventoryUrl + 'inventory_levels.json?limit=250',
+    'headers' : {
+    'Content-Type': 'application/json'
+    }
+  }
+
   try {
     // Call makeRequest and wait for all the data to be fetched
-    await makeRequest(options.url)
+    await makeRequest(options.url, 'inventory')
     for (const data of totalIventoryJSON) {
       await InventoryModel.findOrCreateByItemId(data.inventory_item_id, {
       available: data.available })

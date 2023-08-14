@@ -6,6 +6,13 @@ import { generateToken } from '../utils'
 
 export const userRouter = express.Router()
 
+userRouter.get('/',
+  asyncHandler(async (req: Request, res: Response) => {
+    const users = await UserModel.find()
+    res.json(users)
+  })
+)
+
 userRouter.post('/signin', 
   asyncHandler(async (req: Request, res: Response) => {
     const { email, password } = req.body

@@ -48,7 +48,6 @@ const Signin = () => {
         </Link>
       </div>
       <title>Sign In</title>
-      <h2 className='my-3'>Sign In</h2>
       <Form onSubmit={submitHandler}>
         <Form.Group className='mb-3' controlId='email'>
           <Form.Label>Email</Form.Label>
@@ -70,10 +69,10 @@ const Signin = () => {
           <Button disabled={isLoading} type='submit'>Sign In</Button>
           { isLoading && <LoadingBox /> }  
         </div>
-        <div className='mb-3'>
+        {/* <div className='mb-3'>
           New Customer?{' '} 
           <Link to={`/signup?redirect=${redirect}`}>Create your account</Link>
-        </div>
+        </div> */}
       </Form>
     </Container>
   )

@@ -1,6 +1,12 @@
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import apiClient from "../apiClient"
-import { UserInfo } from "../types/User"
+import { User, UserInfo } from "../types/User"
+
+export const useGetUsersQuery = () => 
+  useQuery({
+    queryKey: ['users'],
+    queryFn: async () => (await apiClient.get<User[]>(`api/user`)).data,
+  })
 
 export const  useSigninMutation = () =>
   useMutation({

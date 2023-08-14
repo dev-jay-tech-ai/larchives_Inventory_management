@@ -11,6 +11,10 @@ export class User {
   public password!: string
   @prop({ required: true, default: false })
   public isAdmin!: boolean
+  @prop({ required: true, default: 'pending' })
+  public status?: string
+  @prop({ required: true, default: '../images/la_w.jpg' })
+  public image?: string
 }
 
 export const UserModel = getModelForClass(User)

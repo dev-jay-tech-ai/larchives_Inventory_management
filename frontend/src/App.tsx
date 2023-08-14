@@ -14,10 +14,15 @@ import Live from './pages/live/Live'
 import Stock from './pages/stock/Stock'
 import Modal from 'react-modal'
 import PrivateRoute from './PrivateRoute'
+import { DarkModeContext } from './context/darkModeContext'
+import { productInputs, userInputs } from './formSource'
+import { useContext } from 'react';
 
 const App = () => {
+  const { darkMode } = useContext(DarkModeContext)
+
   return (
-    <div>
+    <div className={darkMode ? 'app dark' : 'app'}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<PrivateRoute allowRedirect={true}><Home /></PrivateRoute>} />
@@ -26,13 +31,13 @@ const App = () => {
           <Route path="inventories" element={<PrivateRoute allowRedirect={true}><Inventory /></PrivateRoute>} />
           <Route path="signup" element={<Signup />} />
           <Route path="signin" element={<Signin />} />
-          <Route path="users" element={<PrivateRoute allowRedirect={true}><List /></PrivateRoute>}>
-            <Route path=":userId" element={<PrivateRoute allowRedirect={true}><Single /></PrivateRoute>} />
-            <Route path="new" />
-          </Route>
+          <Route path="users/:userId" element={<PrivateRoute allowRedirect={true}><Single /></PrivateRoute>} /> 
+          <Route path="users/new" element={<PrivateRoute allowRedirect={true}><New inputs={userInputs} title="Add New User" /></PrivateRoute>} />
+          <Route path="users" element={<PrivateRoute allowRedirect={true}><List /></PrivateRoute>} />
           <Route path="products" element={<PrivateRoute allowRedirect={true}><List /></PrivateRoute>}>
+            <Route index element={<List />} />
             <Route path=":productId" element={<PrivateRoute allowRedirect={true}><Single /></PrivateRoute>} />
-            <Route path="new" />
+            <Route path="new" element={<PrivateRoute allowRedirect={true}><New inputs={userInputs} title="Add New User" /></PrivateRoute>}/>
           </Route>
         </Routes>
       </BrowserRouter>

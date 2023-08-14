@@ -18,19 +18,21 @@ import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import { Link } from "react-router-dom"
 import logo from '../../assets/logo.svg' // Adjust the path based on the location of your Sidebar component
 import { Store } from '../../Store'
+import { DarkModeContext } from "../../context/darkModeContext";
 
 const Sidebar = () => {
   const {
     state: { userInfo },
-    dispatch,
+    dispatch: userDispatch,
   } = useContext(Store)
 
   const signoutHandler = () => {
-    dispatch({ type: 'USER_SIGNOUT' })
+    userDispatch({ type: 'USER_SIGNOUT' })
     localStorage.removeItem('userInfo')
     window.location.href = '/signin'
   }
-  
+  const { dispatch: darkModeDispatch } = useContext(DarkModeContext)
+
   return (
     <div className="sidebar">
       <div className="top">
@@ -122,9 +124,11 @@ const Sidebar = () => {
       <div className="bottom">
         <div
           className="colorOption"
+          onClick={() => darkModeDispatch({ type: 'LIGHT' })}
         ></div>
         <div
           className="colorOption"
+          onClick={() => darkModeDispatch({ type: 'DARK' })}
         ></div>
       </div>
     </div>
