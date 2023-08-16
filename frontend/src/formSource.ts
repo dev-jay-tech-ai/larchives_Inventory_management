@@ -1,39 +1,13 @@
 export const userInputs = [
   {
     id: 1,
-    label: "Username",
+    label: "Name and surname*",
     type: "text",
   },
   {
     id: 2,
-    label: "Name and surname",
-    type: "text",
-  },
-  {
-    id: 3,
-    label: "Email",
+    label: "Email*",
     type: "mail",
-  },
-  {
-    id: 4,
-    label: "Phone",
-    type: "text",
-  },
-  {
-    id: 5,
-    label: "Password",
-    type: "password",
-  },
-  {
-    id: 6,
-    label: "Address",
-    type: "text",
-  },
-  {
-    id: 7,
-    label: "Country",
-    type: "text",
-    placeholder: "United Kingdom",
   },
 ]
 

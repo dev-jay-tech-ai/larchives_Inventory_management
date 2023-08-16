@@ -9,7 +9,6 @@ import { seedRouter } from './routers/seedRouter'
 import { productRouter } from './routers/productRouter'
 import { dbRouter } from './routers/dbRouter'
 import { sheetRouter } from  './routers/sheetRouter'
-import { inventoryRouter } from  './routers/inventoryRouter'
  
 dotenv.config()
 
@@ -35,7 +34,6 @@ app.use('/api/stock', stockRouter)
 app.use('/api/seed', seedRouter)
 app.use('/api/db', dbRouter)
 app.use('/api/sheet', sheetRouter)
-app.use('/api/inventory', inventoryRouter)
 
 /** deployment  */
 // app.use(express.static(path.join(__dirname, '../../frontend/dist')))

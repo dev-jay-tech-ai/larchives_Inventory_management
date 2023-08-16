@@ -1,5 +1,5 @@
 import "./datatable.scss";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import { userColumns } from "../../datatablesource/user";
 import { CellRenderParams } from "../../types/datatable";
@@ -9,7 +9,7 @@ import { MessageBox } from "../MessageBox";
 import { ApiError } from "../../types/ApiError";
 import { getError } from "../../utils";
 
-const Datatable = () => {
+const Datatable:React.FC = () => {
   const { data: users, isLoading, error } = useGetUsersQuery()
   const usersWithIds = users?.map((user) => ({
     ...user,
@@ -24,7 +24,7 @@ const Datatable = () => {
       renderCell: (params: CellRenderParams) => {
         return (
           <div className="cellAction">
-            <Link to={'/users/test'} style={{ textDecoration: "none" }}>
+            <Link to={`/users/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
             <div

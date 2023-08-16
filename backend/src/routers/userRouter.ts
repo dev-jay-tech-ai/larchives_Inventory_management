@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler'
 import { User, UserModel } from '../models/userModel'
 import bcrypt from 'bcryptjs'
 import { generateToken } from '../utils'
+import { initial_pw } from '../pwGenerator'
 
 export const userRouter = express.Router()
 
@@ -51,12 +52,15 @@ userRouter.post('/signup',
   })
 )
 
-userRouter.post('/signup',
+userRouter.post('/adduser',
   asyncHandler(async (req: Request, res: Response) =>  {
-    const { name, email, password } = req.body
+    const { name, email, file } = req.body
+    const password = Math.random().toString(36).slice(2)
+    initial_pw(email, password)
     const user = await UserModel.create({
       name,
       email,
+      file,
       password: bcrypt.hashSync(password)
     } as User)
     res.json({
@@ -64,8 +68,17 @@ userRouter.post('/signup',
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      image: user.file,
       token: generateToken(user)
     })
+  })
+)
 
+userRouter.get('/:slug', 
+  asyncHandler(async (req: Request, res: Response) => {
+    const user = await UserModel.findOne({ _id: req.params.slug })
+    console.log(user)
+    if(user) res.json(user)
+    else res.status(401).json({ message: 'Invaild userId' })
   })
 )

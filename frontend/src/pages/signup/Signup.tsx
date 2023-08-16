@@ -25,7 +25,7 @@ const Signup = () => {
     if(userInfo) navigate(redirect) 
   },[ navigate, redirect, userInfo ])
 
-  const { mutateAsync: signup, isLoading } = useSignupMutation()
+  const { mutateAsync: signup } = useSignupMutation()
   const submitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     if(password !== confirmPassword) {

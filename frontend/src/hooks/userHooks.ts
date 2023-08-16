@@ -8,7 +8,13 @@ export const useGetUsersQuery = () =>
     queryFn: async () => (await apiClient.get<User[]>(`api/user`)).data,
   })
 
-export const  useSigninMutation = () =>
+export const useGetUserQuery = (userId: string) => 
+  useQuery({
+    queryKey: ['user', userId],
+    queryFn: async () => (await apiClient.get<User>(`api/user/${userId}`)).data,
+  })  
+
+export const useSigninMutation = () =>
   useMutation({
     mutationFn: async ({
       email,
@@ -23,19 +29,36 @@ export const  useSigninMutation = () =>
     ).data
   })
 
-  export const  useSignupMutation = () =>
+export const  useSignupMutation = () =>
+useMutation({
+  mutationFn: async ({
+    name,
+    email,
+    password
+  } : {
+    name: string
+    email: string
+    password: string
+  }) => (
+    await apiClient.post<UserInfo>(`api/user/signup`,{
+      name, email, password
+    })    
+  ).data
+}) 
+
+export const useAddUserMutation = () =>
   useMutation({
     mutationFn: async ({
       name,
       email,
-      password
+      file
     } : {
       name: string
       email: string
-      password: string
+      file: string | undefined
     }) => (
-      await apiClient.post<UserInfo>(`api/user/signup`,{
-        name, email, password
+      await apiClient.post<UserInfo>(`api/user/adduser`,{
+        name, email, file
       })    
     ).data
   }) 

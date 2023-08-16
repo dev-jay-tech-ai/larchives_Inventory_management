@@ -14,7 +14,7 @@ export class User {
   @prop({ required: true, default: 'pending' })
   public status?: string
   @prop({ required: true, default: '../images/la_w.jpg' })
-  public image?: string
+  public file?: string
 }
 
 export const UserModel = getModelForClass(User)

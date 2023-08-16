@@ -61,6 +61,15 @@
             }
           }
         }
+
+        .saveButton {
+          background-color: #7451f8;
+          border: 0;
+          width: 80%;
+          position: absolute;
+          left: 50%;
+          transform: translate(-50%, 30%);
+        }
       }
 
       .right {

@@ -16,7 +16,7 @@ const queryClient = new QueryClient()
 root.render(
   <React.StrictMode>
     <StoreProvider>
-      <QueryClientProvider client={queryClient} contextSharing={true}>
+      <QueryClientProvider client={queryClient}>
         <DarkModeProvider>
           <App />
         </DarkModeProvider>

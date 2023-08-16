@@ -4,6 +4,7 @@ export type User = {
   email: string
   token: string
   isAdmin: boolean
+  file: string
 }
 
 export type UserInfo = {
