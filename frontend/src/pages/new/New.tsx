@@ -84,8 +84,9 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
                 <input
                   type="file"
                   id="file"
+                  name='file'
                   onChange={(e) => {
-                    const selectedFile = e.target.files?.[0]
+                    const selectedFile = e.target.files?.[0];
                     selectedFile && setFile(selectedFile)
                   }}
                   style={{ display: "none" }}
@@ -96,6 +97,7 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>
                   <input 
+                  name={input.label === 'Email*' ? 'email': 'name'}
                   type={input.type} 
                   placeholder={input.placeholder} 
                   onChange={(e) => {

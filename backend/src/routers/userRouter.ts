@@ -100,19 +100,23 @@ userRouter.get('/user/:slug',
 userRouter.put(
   '/profile',
   isAuth,
+  upload.single('file'),
   asyncHandler(async (req: Request, res: Response) => {
     const user = await UserModel.findById(req.user._id)
     if (user) {
       user.name = req.body.name || user.name
       user.email = req.body.email || user.email
+      user.file = req.file?.filename || user.file
       if (req.body.password) {
         user.password = bcrypt.hashSync(req.body.password, 8)
       }
       const updatedUser = await user.save()
+      console.log(updatedUser)
       res.send({
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
+        file: updatedUser.file,
         isAdmin: updatedUser.isAdmin,
         token: generateToken(updatedUser),
       })

@@ -8,12 +8,15 @@ const apiClient = axios.create({
   }  
 })
 
-apiClient.interceptors.request.use(async (config) => {
-  // console.log(config)
-  return config
+apiClient.interceptors.request.use(
+  async (config) => {
+    if (localStorage.getItem('userInfo'))
+      config.headers.authorization = `Bearer ${
+        JSON.parse(localStorage.getItem('userInfo')!).token
+      }`
+    return config
   },
   (error) => {
-    console.log('에러',error)
     Promise.reject(error)
   }
 )

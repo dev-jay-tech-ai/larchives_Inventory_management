@@ -30,12 +30,12 @@ const Profile = () => {
         toast.error('Passwords do not match')
         return
       }
-      const data = await updateProfile({
-        file,
-        name,
-        email,
-        password,
-      })
+      const formData = new FormData()
+      formData.append('name', name)
+      formData.append('email', email)
+      formData.append('password', password)
+      file && formData.append('file', file)
+      const data = await updateProfile(formData)
       dispatch({ type: 'USER_SIGNIN', payload: data })
       localStorage.setItem('userInfo', JSON.stringify(data))
       toast.success('User updated successfully')
@@ -54,7 +54,7 @@ const Profile = () => {
             <title>User Profile</title>
           </div>
           <h1 className="my-3">{givenname}'s Profile</h1>
-          <form onSubmit={submitHandler}>
+          <form encType='multipart/form-data' onSubmit={submitHandler}>
             <Form.Group className="mb-3" controlId="file">
               <Form.Label>File</Form.Label>
               <Form.Control
@@ -63,7 +63,6 @@ const Profile = () => {
                   const selectedFile = e.target.files?.[0]
                   selectedFile && setFile(selectedFile)
                 }}
-                required
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="name">

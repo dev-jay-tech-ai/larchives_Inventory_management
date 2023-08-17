@@ -171,7 +171,6 @@ productRouter.get('/', asyncHandler(async (req: Request, res: Response) => {
 productRouter.delete('/delete/:productId', 
   asyncHandler(async (req:Request, res:Response) => {
     const id = req.params.productId
-    // console.log(id)
     try {
       await ProductModel.deleteOne({ productId: id })
     } catch (err) {
