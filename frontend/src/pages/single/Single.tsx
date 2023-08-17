@@ -12,11 +12,13 @@ import { getError } from "../../utils"
 import { useState } from "react";
 import { User } from "../../types/User";
 import { Button } from "react-bootstrap";
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const Single:React.FC = () => {
   const { userId } = useParams()
   const { data: user, isLoading, error } = useGetUserQuery(userId!)
-
   const [ isEditMode, setIsEditMode ] = useState(false)
   const [ editedUser, setEditedUser ] = useState<User | undefined>(user)
 
@@ -42,7 +44,8 @@ const Single:React.FC = () => {
             <h1 className="title">Information</h1> 
             <div className="item">
               <img
-                src={editedUser?.file ? editedUser.file : 'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260'}
+                src={editedUser?.file ? process.env.REACT_APP_IMAGE_BASE_URL + editedUser.file : 
+                  user?.file ? process.env.REACT_APP_IMAGE_BASE_URL + user.file : 'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260'}
                 alt=''
                 className="itemImg"
               />
@@ -53,7 +56,7 @@ const Single:React.FC = () => {
                       type='text' 
                       value={editedUser?.name} 
                       onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })} /> :
-                  editedUser?.name}
+                  user?.name}
                 </h1>
                 <div className="detailItem">
                   <span className="itemKey">Email:</span>
@@ -63,7 +66,7 @@ const Single:React.FC = () => {
                         type='text' 
                         value={editedUser?.email} 
                         onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /> :
-                    editedUser?.email}
+                    user?.email}
                   </span>
                 </div>
                 <div className="detailItem">

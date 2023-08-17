@@ -1,11 +1,11 @@
-import './stock.scss';
-import { useStockQuery } from "../../hooks/stockHooks";
-import LoadingBox from '../../components/LoadingBox';
-import Sidebar from '../../components/sidebar/Sidebar';
-import Navbar from '../../components/navbar/Navbar';
-import { MessageBox } from '../../components/MessageBox';
-import { getError } from '../../utils';
-import { ApiError } from '../../types/ApiError';
+import './stock.scss'
+import { useStockQuery } from "../../hooks/stockHooks"
+import LoadingBox from '../../components/LoadingBox'
+import Sidebar from '../../components/sidebar/Sidebar'
+import Navbar from '../../components/navbar/Navbar'
+import { MessageBox } from '../../components/MessageBox'
+import { getError } from '../../utils'
+import { ApiError } from '../../types/ApiError'
 
 interface StockItem {
   title: string;

@@ -4,7 +4,7 @@ export type User = {
   email: string
   token: string
   isAdmin: boolean
-  file: string
+  file: string | null
 }
 
 export type UserInfo = {
@@ -12,4 +12,5 @@ export type UserInfo = {
   email: string
   token: string
   isAdmin: boolean
+  file: File | null
 }

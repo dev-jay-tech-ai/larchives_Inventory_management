@@ -13,7 +13,7 @@ export class User {
   public isAdmin!: boolean
   @prop({ required: true, default: 'pending' })
   public status?: string
-  @prop({ required: true, default: '../images/la_w.jpg' })
+  @prop({ required: true, default: 'la_w.jpg' })
   public file?: string
 }
 

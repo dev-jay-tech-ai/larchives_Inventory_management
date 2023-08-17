@@ -1,17 +1,18 @@
 import { useMutation, useQuery } from "@tanstack/react-query"
 import apiClient from "../apiClient"
+import formClient from '../formClient'
 import { User, UserInfo } from "../types/User"
 
 export const useGetUsersQuery = () => 
   useQuery({
     queryKey: ['users'],
-    queryFn: async () => (await apiClient.get<User[]>(`api/user`)).data,
+    queryFn: async () => (await apiClient.get<User[]>(`api/users`)).data,
   })
 
 export const useGetUserQuery = (userId: string) => 
   useQuery({
     queryKey: ['user', userId],
-    queryFn: async () => (await apiClient.get<User>(`api/user/${userId}`)).data,
+    queryFn: async () => (await apiClient.get<User>(`api/users/user/${userId}`)).data,
   })  
 
 export const useSigninMutation = () =>
@@ -23,7 +24,7 @@ export const useSigninMutation = () =>
       email: string
       password: string
     }) => (
-      await apiClient.post<UserInfo>(`api/user/signin`,{
+      await apiClient.post<UserInfo>(`api/users/signin`,{
         email, password
       })    
     ).data
@@ -40,25 +41,42 @@ useMutation({
     email: string
     password: string
   }) => (
-    await apiClient.post<UserInfo>(`api/user/signup`,{
+    await apiClient.post<UserInfo>(`api/users/signup`,{
       name, email, password
     })    
   ).data
-}) 
+  }) 
 
 export const useAddUserMutation = () =>
   useMutation({
-    mutationFn: async ({
-      name,
-      email,
-      file
-    } : {
+    mutationFn: async (formData : {
       name: string
       email: string
-      file: string | undefined
+      file: File | null
     }) => (
-      await apiClient.post<UserInfo>(`api/user/adduser`,{
-        name, email, file
-      })    
+      await formClient.post<UserInfo>(`api/users/adduser`,formData)   
     ).data
   }) 
+
+  export const useUpdateProfileMutation = () =>
+  useMutation({
+    mutationFn: async ({
+      file,
+      name,
+      email,
+      password,
+    }: {
+      file: File | null
+      name: string
+      email: string
+      password: string
+    }) =>
+      (
+        await apiClient.put<UserInfo>(`api/users/profile`, {
+          file,
+          name,
+          email,
+          password,
+        })
+      ).data,
+  })  

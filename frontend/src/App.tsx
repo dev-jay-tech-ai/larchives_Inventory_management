@@ -19,6 +19,7 @@ import { DarkModeContext } from './context/darkModeContext'
 import { userInputs } from './formSource'
 import { useContext } from 'react'
 import './style/dark.scss'
+import Profile from './pages/profile/Profile';
 
 const App = () => {
   const { darkMode } = useContext(DarkModeContext)
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="products/:productId" element={<PrivateRoute allowRedirect={true}><Single /></PrivateRoute>} />
           <Route path="products/new" element={<PrivateRoute allowRedirect={true}><New inputs={userInputs} title="Add New Product" /></PrivateRoute>}/>
           <Route path="products" element={<PrivateRoute allowRedirect={true}><List /></PrivateRoute>} /> 
+          <Route path="profile" element={<PrivateRoute allowRedirect={true}><Profile /></PrivateRoute>} /> 
           <Route path="orders" element={<PrivateRoute allowRedirect={true}><PageNotFound /></PrivateRoute>} /> 
           <Route path="deliveries" element={<PrivateRoute allowRedirect={true}><PageNotFound /></PrivateRoute>} /> 
         </Routes>

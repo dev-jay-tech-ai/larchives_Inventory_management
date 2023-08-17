@@ -2,21 +2,13 @@ import nodemailer from 'nodemailer'
 import env from 'dotenv'
 
 env.config()
-const { EMAIL, PW } = process.env
+const { EMAIL, GMAIL_APP_PW } = process.env
 
 const transporter = nodemailer.createTransport({
-  host: 'smtpout.secureserver.net',  
-  secure: true,
-  secureConnection: false, // TLS requires secureConnection to be false
-  tls: {
-      ciphers:'SSLv3'
-  },
-  requireTLS:true,
-  port: 465,
-  debug: true,
+  service: 'gmail', 
   auth: {
     user: EMAIL,
-    pass: PW
+    pass: GMAIL_APP_PW
   }
 })
 
@@ -24,10 +16,12 @@ const main = async (receiver_email: string, temp_pw: string) => {
   await transporter.sendMail({
     from: EMAIL,
     to: receiver_email,
-    subject: 'Welcome to Larchvies',
+    subject: 'Welcome to Larchives',
     html: 
-     "<h1>This is your termperary password : "+ temp_pw +"</h1>"
-    +"<h3>Please set your new password after signing in</h3>"
+     "<h1>Here is your temporary password : "+ temp_pw +"</h1>"
+    +"<h3>Kindly set a new password upon signing in.</h3>"
+    +"<p>Best regards,</p><br/>"
+    +"<p>Team Larchives</p>"
   })
 }
 

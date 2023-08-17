@@ -1,8 +1,10 @@
-import { GridColDef } from "@mui/x-data-grid";
+import { GridColDef } from "@mui/x-data-grid"
+import dotenv from 'dotenv'
 
+dotenv.config()
 interface CellRenderParams {
   row: {
-    img: string;
+    file: string;
     username: string;  
     email: string;  
     age: number;
@@ -21,7 +23,7 @@ export const userColumns:GridColDef[] = [
     renderCell: (params: CellRenderParams) => {
       return (
         <div className="cellWithImg">
-          <img className="cellImg" src={params.row.file} alt="avatar" />
+          <img className="cellImg" src={process.env.REACT_APP_IMAGE_BASE_URL + params.row.file} alt="avatar" />
           {params.row.name}
         </div>
       );

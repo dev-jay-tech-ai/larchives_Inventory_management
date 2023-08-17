@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "../../components/navbar/Navbar"
 import Sidebar from "../../components/sidebar/Sidebar"
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
@@ -28,12 +28,12 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
   const redirectInUrl =  new URLSearchParams(search).get('redirect')
   const redirect = redirectInUrl ? redirectInUrl :  '/'
 
-  const [file, setFile] = useState<File | undefined>(undefined)
+  const [file, setFile] = useState<File | null>(null)
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
 
   const { state, dispatch }  = useContext(Store)
-  const { UserInfo } = state
+  // const { UserInfo } = state
 
   const { mutateAsync: adduser } = useAddUserMutation()
   const submitHandler = async (e: React.SyntheticEvent) => {
@@ -43,9 +43,11 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
       return
     }
     try {
-      const data = await adduser({
-        name, email, file
-      })
+      const formData = new FormData()
+      formData.append('name', name)
+      formData.append('email', email)
+      file && formData.append('file', file)
+      const data = await adduser(formData)
       dispatch({ type: 'USER_SIGNIN', payload: data })
       localStorage.setItem('userInfo', JSON.stringify(data))
       navigate(redirect || '/')
@@ -59,9 +61,9 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
       <Sidebar />
       <div className="newContainer">
         <Navbar />
-        <div className="top">
-          {/* <h1>{title}</h1> */}
-        </div>
+        {/*<div className="top">
+           <h1>{title}</h1> 
+        </div>*/}
         <div className="bottom">
           <div className="left">
             <img
@@ -74,7 +76,7 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
             />
           </div>
           <div className="right">
-            <form>
+            <form encType='multipart/form-data'>
               <div className="formInput">
                 <label htmlFor="file">
                   Image: <DriveFolderUploadOutlinedIcon className="icon" />
@@ -83,13 +85,13 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
                   type="file"
                   id="file"
                   onChange={(e) => {
-                    const selectedFile = e.target.files?.[0];
+                    const selectedFile = e.target.files?.[0]
                     selectedFile && setFile(selectedFile)
                   }}
                   style={{ display: "none" }}
                 />
               </div>
-
+              <div className="formInput"></div>
               {inputs?.map((input) => (
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>
@@ -103,7 +105,6 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
                   />
                 </div>
               ))}
-              <div className="formInput"></div>
               <button onClick={submitHandler}>Send</button>
             </form>
           </div>

@@ -6,12 +6,12 @@ import apiClient from '../apiClient'
 export const useGetProductsQuery = () => 
   useQuery({
     queryKey: ['products'],
-    queryFn: async () => (await apiClient.get<Product[]>(`api/product`)).data,
+    queryFn: async () => (await apiClient.get<Product[]>(`api/products`)).data,
   })
 
 export const useUpdateProductMutation = () => {
   const mutationFn: MutationFunction<InventoryUpdateAPIResponse,{ inventoryItemId: number, qty: number }> = async (data) => {
-    const response = await apiClient.post('api/product/update', {
+    const response = await apiClient.post('api/products/update', {
       data,
     })
     return response.data;
@@ -22,20 +22,20 @@ export const useUpdateProductMutation = () => {
 export const useUpdateProductsMutation = () => 
   useMutation({
     mutationFn: async (products: ProductObj[]) =>
-      (await apiClient.post('api/product/update/bulk', {
+      (await apiClient.post('api/products/update/bulk', {
         data: products, // Pass the productIds as data in the request body
       })).data,
   })
 
 export const useDeleteProductMutation = () => // Update the return type to MutationFunction
   useMutation({
-    mutationFn: async (productId: number) => (await apiClient.delete(`api/product/delete/${productId}`))
+    mutationFn: async (productId: number) => (await apiClient.delete(`api/products/delete/${productId}`))
   })
 
 export const useDeleteProductsMutation = () =>
   useMutation({
     mutationFn: async (productIds: number[]) =>
-      (await apiClient.delete('api/product/delete', {
+      (await apiClient.delete('api/products/delete', {
         data: productIds, // Pass the productIds as data in the request body
       })).data,
   })
