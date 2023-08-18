@@ -20,6 +20,7 @@ import logo from '../../assets/logo.svg' // Adjust the path based on the locatio
 import { Store } from '../../Store'
 import { DarkModeContext } from "../../context/darkModeContext";
 
+
 const Sidebar = () => {
   const {
     state: { userInfo },
@@ -66,12 +67,13 @@ const Sidebar = () => {
               <span>Inventory</span>
             </li>
           </Link>
+          {userInfo?.isAdmin &&
           <Link to="/users" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
               <span>Users</span>
             </li>
-          </Link>
+          </Link>}
           <Link to="/products" style={{ textDecoration: "none" }}>
             <li>
               <StoreIcon className="icon" />

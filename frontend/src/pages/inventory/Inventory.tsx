@@ -69,7 +69,7 @@ const Inventory = () => {
 
   const HandleCheckedUpdate = async () =>  {
     if(selected.length === 0) {
-      alert('Please Selcect Item')
+      alert('Please Selcect At Least One Item')
       return;
     }
     try {
