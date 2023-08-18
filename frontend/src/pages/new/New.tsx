@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Navbar from "../../components/navbar/Navbar"
 import Sidebar from "../../components/sidebar/Sidebar"
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import "./new.scss"
 import { useAddUserMutation } from "../../hooks/userHooks"
 import { ApiError } from "../../types/ApiError"
-import { getError } from "../../utils"
+import { getByteSize, getError } from "../../utils"
 import { toast } from "react-toastify"
 import { Store } from '../../Store'
 import { useLocation, useNavigate } from "react-router-dom";
@@ -42,6 +42,7 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
       toast.error('name and email are required ')
       return
     }
+
     try {
       const formData = new FormData()
       formData.append('name', name)
@@ -86,8 +87,12 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
                   id="file"
                   name='file'
                   onChange={(e) => {
-                    const selectedFile = e.target.files?.[0];
-                    selectedFile && setFile(selectedFile)
+                    const selectedFile = e.target.files?.[0]
+                    if(selectedFile) {
+                      const maxSize = 5 * 1024 * 1024
+                      if(selectedFile.size > maxSize) alert('Image is too large')
+                      else setFile(selectedFile)
+                    } 
                   }}
                   style={{ display: "none" }}
                 />
@@ -97,13 +102,13 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>
                   <input 
-                  name={input.label === 'Email*' ? 'email': 'name'}
-                  type={input.type} 
-                  placeholder={input.placeholder} 
-                  onChange={(e) => {
-                    if(input.label === 'Email*') setEmail(e.target.value) 
-                    else if(input.label === 'Name and surname*') setName(e.target.value)
-                  }}
+                    name={input.label === 'Email*' ? 'email': 'name'}
+                    type={input.type} 
+                    placeholder={input.placeholder} 
+                    onChange={(e) => {
+                      if(input.label === 'Email*') setEmail(e.target.value) 
+                      else if(input.label === 'Name and surname*') setName(e.target.value)
+                    }}
                   />
                 </div>
               ))}

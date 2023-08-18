@@ -7,7 +7,7 @@ import {
   useUpdateProductsMutation,
   useShopifyInventoryMutation
 } from '../../hooks/productHooks'
-import LoadingBox from '../../components/LoadingBox'
+import LoadingBox from '../../components/loading/LoadingBox'
 import { getError } from '../../utils'
 import { ApiError } from '../../types/ApiError'
 import { MessageBox } from '../../components/MessageBox'
@@ -15,6 +15,7 @@ import { Product, Variants, ProductObj } from '../../types/Product'
 import { Button } from 'react-bootstrap'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+import { LinearProgress } from '@mui/material'
 
 const Inventory = () => {
   const { data: products, isLoading, error } = useGetProductsQuery()
@@ -23,6 +24,7 @@ const Inventory = () => {
   const { mutateAsync: shopifyInventory } = useShopifyInventoryMutation()
   const [ selected, setSelected ] = useState<ProductObj[]>([])
   const [ selectedAll, setSelectedAll ] = useState(false)
+  const [ isLoadingSubmit, setIsLoadingSubmit ] = useState(false)
 
   const handleUpdate = async (id: number, qty: number) => {
     try {
@@ -35,11 +37,18 @@ const Inventory = () => {
 
   const handleCheckboxChange = (item: Variants, qty: number) => {
     const isSelected = selected.some((sel) => sel.inventoryItemId === item.inventory_item_id)
-    if (isSelected) setSelected(selected.filter((sel) => sel.inventoryItemId !== item.inventory_item_id))
-    else {
-      setSelected([ ...selected, { inventoryItemId: item.inventory_item_id, qty: qty || 0 }])
+    try {
+      if (isSelected) {
+        setIsLoadingSubmit(true)
+        setSelected(selected.filter((sel) => sel.inventoryItemId !== item.inventory_item_id))
+      } else {
+        setSelected([ ...selected, { inventoryItemId: item.inventory_item_id, qty: qty || 0 }])
+      }
+    } catch(err) {
+      toast.error(getError(err as ApiError))
+    } finally {
+      setIsLoadingSubmit(false)
     }
-    
   }
 
   const handleCheckedAll = () => {
@@ -59,15 +68,16 @@ const Inventory = () => {
   }
 
   const HandleCheckedUpdate = async () =>  {
-    console.log(selected)  // 배열으로 전달됨
-    // handleUpdate 를 bulk로 가능하도록 만들기
+    if(selected.length === 0) {
+      alert('Please Selcect Item')
+      return;
+    }
     try {
       await updateProducts(selected)
       toast.success('Data Updated!')    
     } catch (err) {
       throw getError(error as ApiError)
     }
-   
   }
 
   const HandleShopifyInventoryUpdate = async () => {
@@ -92,6 +102,7 @@ const Inventory = () => {
             onClick={HandleShopifyInventoryUpdate}
           >Import current inventory</Button>
         </div>
+        {isLoadingSubmit ? <div className='progressionBar'><LinearProgress /></div> : ''}
         {isLoading ? <LoadingBox />
         : error ? <MessageBox variant='danger'>{getError(error as ApiError)}</MessageBox>
         : 

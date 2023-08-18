@@ -8,7 +8,7 @@ import {
   useDeleteProductsMutation,
   useUpdateProductMutation
  } from "../../hooks/productHooks";
-import LoadingBox from "../LoadingBox";
+import LoadingBox from "../loading/LoadingBox";
 import { MessageBox } from "../MessageBox";
 import { getError } from "../../utils";
 import { ApiError } from "../../types/ApiError";

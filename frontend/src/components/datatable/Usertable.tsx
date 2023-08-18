@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { userColumns } from "../../datatablesource/user";
 import { CellRenderParams } from "../../types/datatable";
 import { useGetUsersQuery } from "../../hooks/userHooks";
-import LoadingBox from "../LoadingBox";
+import LoadingBox from "../loading/LoadingBox";
 import { MessageBox } from "../MessageBox";
 import { ApiError } from "../../types/ApiError";
 import { getError } from "../../utils";
@@ -27,11 +27,7 @@ const Datatable:React.FC = () => {
             <Link to={`/users/${params.row._id}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
-            <div
-              className="deleteButton"
-            >
-              Delete
-            </div>
+            <div className="deleteButton">Delete</div>
           </div>
         );
       },

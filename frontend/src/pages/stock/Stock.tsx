@@ -1,6 +1,6 @@
 import './stock.scss'
 import { useStockQuery } from "../../hooks/stockHooks"
-import LoadingBox from '../../components/LoadingBox'
+import LoadingBox from '../../components/loading/LoadingBox'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Navbar from '../../components/navbar/Navbar'
 import { MessageBox } from '../../components/MessageBox'

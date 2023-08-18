@@ -5,7 +5,7 @@ import { Store } from '../../Store'
 import { toast } from 'react-toastify'
 import { ApiError } from "../../types/ApiError"
 import { getError } from "../../utils"
-import LoadingBox from '../../components/LoadingBox'
+import LoadingBox from '../../components/loading/LoadingBox'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Navbar from '../../components/navbar/Navbar'
 import { useUpdateProfileMutation } from '../../hooks/userHooks'
@@ -61,7 +61,11 @@ const Profile = () => {
                 type='file'
                 onChange={(e) => {
                   const selectedFile = e.target.files?.[0]
-                  selectedFile && setFile(selectedFile)
+                  if(selectedFile) {
+                    const maxSize = 5 * 1024 * 1024
+                    if(selectedFile.size > maxSize) alert('Image is too large')
+                    else setFile(selectedFile)
+                  } 
                 }}
               />
             </Form.Group>

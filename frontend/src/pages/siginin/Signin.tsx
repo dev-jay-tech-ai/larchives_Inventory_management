@@ -8,7 +8,7 @@ import { getError } from "../../utils"
 import { ApiError } from "../../types/ApiError"
 import { Container } from "react-bootstrap"
 import './signin.scss'
-import LoadingBox from "../../components/LoadingBox"
+import LoadingBox from "../../components/loading/LoadingBox"
 import logo from '../../assets/logo.svg'
 
 const Signin = () => {

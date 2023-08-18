@@ -1,7 +1,6 @@
 import { State, Action } from '../types/Mood'
 
 const DarkModeReducer = (state: State, action: Action) => {
-  console.log(state, action)
   switch (action.type) {
     case 'LIGHT': 
       return { darkMode: false }

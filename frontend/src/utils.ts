@@ -19,14 +19,14 @@ export const csvHeaders = [
 
 export const orgData = (stockItems: Sheet[]): SheetData[] => {
   return stockItems.map((stockItem, index: number) => {
-    const data: SheetData = {};
-    data.stock_code = stockItems[index][1];
-    data.title = stockItems[index][2];
-    data.color = stockItems[index][3];
-    data.pricePurchase = String(stockItems[index][5]);
-    data.countInStock = stockItems[index][6];
-    data.price = stockItems[index][7];
-    data.link = stockItems[index][8];
+    const data: SheetData = {}
+    data.stock_code = stockItems[index][1]
+    data.title = stockItems[index][2]
+    data.color = stockItems[index][3]
+    data.pricePurchase = String(stockItems[index][5])
+    data.countInStock = stockItems[index][6]
+    data.price = stockItems[index][7]
+    data.link = stockItems[index][8]
     return data;
-  });
-};
+  })
+}

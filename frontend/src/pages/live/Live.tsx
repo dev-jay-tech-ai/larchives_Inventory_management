@@ -1,6 +1,6 @@
 import './live.scss'
 import { useSheetQuery, useSheetMutation } from "../../hooks/liveHooks"
-import LoadingBox from '../../components/LoadingBox'
+import LoadingBox from '../../components/loading/LoadingBox'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Navbar from '../../components/navbar/Navbar'
 import { MessageBox } from '../../components/MessageBox'
@@ -15,6 +15,7 @@ import { useState, useRef } from 'react'
 import { csvHeaders, orgData } from '../../utils'
 import { SheetData } from "../../types/Sheet"
 import dotenv from 'dotenv'
+import { LinearProgress } from '@mui/material'
 dotenv.config()
 const { 
   REACT_APP_WORKSHEET_ID_CLOTH, 
@@ -28,6 +29,7 @@ const {
 const Live = () => {
   const [ sheetId, setSheetId ] = useState(String(REACT_APP_WORKSHEET_ID_CLOTH))
   const [ modalIsOpen, setModalIsOpen ] = useState(false);
+  const [ isLoadingSubmit, setIsLoadingSubmit ] = useState(false)
   const { mutateAsync: transferSheetData } = useSheetMutation()
   const { data: stockItems, isLoading, error } = useSheetQuery(sheetId)
   const csvLink = useRef<CSVLink & HTMLAnchorElement & { link: HTMLAnchorElement }>(null)
@@ -36,13 +38,16 @@ const Live = () => {
     e.preventDefault()
     try {
       if(stockItems) {
+        setIsLoadingSubmit(true)
         const data:SheetData[] = orgData(stockItems)  
         await transferSheetData({ data }) 
         toast.success('Data transfer successful!')
       }
     } catch(err) {
       toast.error(getError(err as ApiError))
-    } 
+    } finally {
+      setIsLoadingSubmit(false)
+    }
   }
 
   return (
@@ -54,31 +59,37 @@ const Live = () => {
           Sheet Stock
           <div>
             <Button onClick={() => setModalIsOpen(true)}>Export</Button>
-            {modalIsOpen && <Modal 
+            {modalIsOpen && 
+            <Modal 
               isOpen={true}
               onRequestClose={() => setModalIsOpen(false)}
               style={{ content: { 
-                height: '5rem',
+                height: '10rem',
                 display: 'flex',
-                justifyContent: 'space-between'
+                flexDirection: 'column'
               } }}
               > 
-              <Button onClick={() => csvLink.current?.link.click()}>CSV</Button>
-              <CSVLink 
-                data={stockItems?orgData(stockItems):[]} 
-                headers={csvHeaders}
-                onClick={() => {
-                  if (window.confirm('csv파일을 다운로드 받겠습니까?')) return true;
-                  else return false;
-                }}
-                filename={`Export_${moment().format('YYYYMMDD')}`} // 파일명 재고관리에 따라 변경하기
-                ref={csvLink}
-                target='_blank'
-              />
-              <Button onClick={submitInsertHandler}>Insert</Button>
-              <Button onClick={()=> setModalIsOpen(false)}>X</Button>
+              <div className='top' style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Button onClick={() => csvLink.current?.link.click()}>CSV</Button>
+                <CSVLink 
+                  data={stockItems?orgData(stockItems):[]} 
+                  headers={csvHeaders}
+                  onClick={() => {
+                    if (window.confirm('csv파일을 다운로드 받겠습니까?')) return true;
+                    else return false;
+                  }}
+                  filename={`Export_${moment().format('YYYYMMDD')}`} // 파일명 재고관리에 따라 변경하기
+                  ref={csvLink}
+                  target='_blank'
+                />
+                <Button onClick={submitInsertHandler}>Insert</Button>
+                <Button onClick={()=> setModalIsOpen(false)}>X</Button>
+              </div>
+              <div className='bottom' style={{ marginTop: '4rem' }}>
+                {isLoadingSubmit ? <LinearProgress /> : ''}
+              </div>
             </Modal>}
-          </div>
+          </div>   
         </div>
         <div className='category'>
           <Button>Total</Button>
