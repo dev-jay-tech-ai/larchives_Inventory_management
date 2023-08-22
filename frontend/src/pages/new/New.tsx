@@ -5,7 +5,7 @@ import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUpload
 import "./new.scss"
 import { useAddUserMutation } from "../../hooks/userHooks"
 import { ApiError } from "../../types/ApiError"
-import { getByteSize, getError } from "../../utils"
+import { getError } from "../../utils"
 import { toast } from "react-toastify"
 import { Store } from '../../Store'
 import { useLocation, useNavigate } from "react-router-dom";

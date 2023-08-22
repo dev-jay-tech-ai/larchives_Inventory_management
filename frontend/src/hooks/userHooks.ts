@@ -58,7 +58,7 @@ export const useAddUserMutation = () =>
     ).data
   }) 
 
-  export const useUpdateProfileMutation = () =>
+export const useUpdateProfileMutation = () =>
   useMutation({
     mutationFn: async (formData : {
       file: File | null
@@ -67,5 +67,12 @@ export const useAddUserMutation = () =>
       password: string
     }) => (
         await formClient.put<UserInfo>(`api/users/profile`,formData)
+      ).data
+  })  
+
+export const useUpdateUserMutation = () =>
+  useMutation({
+    mutationFn: async (updateData: User) => (
+        await apiClient.put<UserInfo>(`api/users/update`,updateData)
       ).data
   })  

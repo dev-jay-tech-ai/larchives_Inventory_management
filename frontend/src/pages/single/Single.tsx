@@ -9,26 +9,44 @@ import LoadingBox from "../../components/loading/LoadingBox"
 import { MessageBox } from "../../components/MessageBox"
 import { ApiError } from "../../types/ApiError"
 import { getError } from "../../utils"
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { User } from "../../types/User";
 import { Button } from "react-bootstrap";
+import { useUpdateUserMutation } from "../../hooks/userHooks"
 import dotenv from 'dotenv'
+import { toast } from "react-toastify";
+import { Store } from '../../Store'
 
 dotenv.config()
 
-const Single:React.FC = () => {
+const Single = () => {
+  const { dispatch } = useContext(Store)
   const { userId } = useParams()
   const { data: user, isLoading, error } = useGetUserQuery(userId!)
   const [ isEditMode, setIsEditMode ] = useState(false)
-  const [ editedUser, setEditedUser ] = useState<User | undefined>(user)
+  const [ editedUser, setEditedUser ] = useState<User | undefined>(null)
+
+  const { mutateAsync: updateUser } = useUpdateUserMutation()
 
   const editHandler = () => {
     setIsEditMode(!isEditMode)
   }
 
-  const saveHandler = () => {
-    setIsEditMode(false)
+  const saveHandler = async (e) => {
+    e.preventDefault()
+    if (editedUser && user) {
+      const data = await updateUser(editedUser)
+      dispatch({ type: 'USER_SIGNIN', payload: data })
+      localStorage.setItem('userInfo', JSON.stringify(data))
+      toast.success('User updated successfully')
+    }
   }
+  
+  useEffect(() => {
+    if (user) {
+      setEditedUser(user)
+    }
+  }, [user])
 
   return (
     isLoading ? <LoadingBox /> :
@@ -40,7 +58,7 @@ const Single:React.FC = () => {
         <Navbar />
         <div className="top">
           <div className="left">
-            <div className="editButton" onClick={editHandler}>Edit</div>
+          {!isEditMode && <div className="editButton" onClick={editHandler}>Edit</div>}
             <h1 className="title">Information</h1> 
             <div className="item">
               <img
@@ -50,39 +68,24 @@ const Single:React.FC = () => {
                 className="itemImg"
               />
               <div className="details">
-                <h1 className="itemTitle">
-                  {isEditMode ? 
-                    <input 
-                      type='text' 
-                      value={editedUser?.name} 
-                      onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })} /> :
-                  user?.name}
-                </h1>
+                <h1 className="itemTitle">{user?.name}</h1>
                 <div className="detailItem">
                   <span className="itemKey">Email:</span>
-                  <span className="itemValue">
-                    {isEditMode ? 
-                      <input 
-                        type='text' 
-                        value={editedUser?.email} 
-                        onChange={(e) => setEditedUser({ ...editedUser, email: e.target.value })} /> :
-                    user?.email}
-                  </span>
-                </div>
-                <div className="detailItem">
-                  <span className="itemKey">Phone:</span>
-                  <span className="itemValue">+1 2345 67 89</span>
+                  <span className="itemValue">{user?.email}</span>
                 </div>
                 <div className="detailItem">
                   <span className="itemKey">permission:</span>
                   <span className="itemValue">
-                    {isEditMode?
-                      <select name='permission'>
-                        <option value='admin'>{ editedUser?.isAdmin ? 'Admin' : 'Stuff' }</option>
-                        <option value='stuff'>{ editedUser?.isAdmin ? 'Stuff' : 'Admin' }</option>
-                      </select> :
-                    editedUser?.isAdmin ? 'Admin' : 'Stuff' 
-                    }
+                  {isEditMode ?
+                    <select 
+                      name='permission'
+                      value={editedUser === undefined ? user?.isAdmin ? 'admin' : 'stuff' : editedUser?.isAdmin ? 'admin' : 'stuff' }
+                      onChange={(e) => editedUser && setEditedUser({ ...editedUser, isAdmin: e.target.value === 'admin' ? true : false })}
+                    >
+                    <option value='admin'>Admin</option>
+                    <option value='stuff'>Stuff</option>
+                    </select>
+                  : user?.isAdmin ? 'Admin' : 'Stuff'}
                   </span>
                 </div>
               </div>
@@ -100,7 +103,7 @@ const Single:React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default Single

@@ -97,8 +97,7 @@ userRouter.get('/user/:slug',
   })
 )
 
-userRouter.put(
-  '/profile',
+userRouter.put('/profile',
   isAuth,
   upload.single('file'),
   asyncHandler(async (req: Request, res: Response) => {
@@ -123,6 +122,27 @@ userRouter.put(
       return
     }
 
+    res.status(404).json({ message: 'User not found' })
+  })
+)
+
+userRouter.put('/update',
+  isAuth,
+  asyncHandler(async (req: Request, res: Response) => {
+    const user = await UserModel.findById(req.body._id)
+    if (user) {
+      user.isAdmin = req.body.isAdmin
+      const updatedUser = await user.save()
+      res.send({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        file: updatedUser.file,
+        isAdmin: updatedUser.isAdmin,
+        token: generateToken(updatedUser),
+      })
+      return
+    }
     res.status(404).json({ message: 'User not found' })
   })
 )
