@@ -70,7 +70,6 @@ const Datatable = () => {
   const handleUpdate = async () => {
       try {
         // await updateProductMutation.mutateAsync(id, qty);
-        
         console.log('Updated!')
         
       } catch (err) {
@@ -112,15 +111,15 @@ const Datatable = () => {
     <div className="datatable">
       <div className="datatableTitle">
         Product List
-        <div>
-        <Link to={'/products/new'} className="link">
+        <div style={{ width: '20%', display: 'flex', justifyContent: 'space-between' }}>
+          <Link to={'/products/new'} className="link">
           Add New
         </Link>
         <Button>Update</Button>
         <Button onClick={handleSelectionDelete}>Delete</Button>
         </div>
       </div>
-      <div>
+      <div style={{ margin: '10px 0' }}>
         <input 
           type='text' 
           placeholder='Search...'  

@@ -55,9 +55,7 @@ const Live = () => {
       <Sidebar />
       <div className='listContainer'>
         <Navbar /> 
-        <div className='listTitle'>
-          Sheet Stock
-          <div>
+        <div className='listTitle'>Sheet Stock<div>
             <Button onClick={() => setModalIsOpen(true)}>Export</Button>
             {modalIsOpen && 
             <Modal 
@@ -70,7 +68,7 @@ const Live = () => {
               } }}
               > 
               <div className='top' style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Button onClick={() => csvLink.current?.link.click()}>CSV</Button>
+                <Button style={{ backgroundColor:'#6439ff', border:'none' }} onClick={() => csvLink.current?.link.click()}>CSV</Button>
                 <CSVLink 
                   data={stockItems?orgData(stockItems):[]} 
                   headers={csvHeaders}
@@ -82,8 +80,8 @@ const Live = () => {
                   ref={csvLink}
                   target='_blank'
                 />
-                <Button onClick={submitInsertHandler}>Insert</Button>
-                <Button onClick={()=> setModalIsOpen(false)}>X</Button>
+                <Button style={{ backgroundColor:'#6439ff', border:'none' }} onClick={submitInsertHandler}>Insert</Button>
+                <Button style={{ backgroundColor:'#6439ff', border:'none' }} onClick={()=> setModalIsOpen(false)}>X</Button>
               </div>
               <div className='bottom' style={{ marginTop: '4rem' }}>
                 {isLoadingSubmit ? <LinearProgress /> : ''}
