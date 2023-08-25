@@ -111,7 +111,7 @@ const Datatable = () => {
     <div className="datatable">
       <div className="datatableTitle">
         Product List
-        <div style={{ width: '20%', display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ width: '250px', display: 'flex', justifyContent: 'space-between' }}>
           <Link to={'/products/new'} className="link">
           Add New
         </Link>
