@@ -15,6 +15,14 @@ declare namespace Express {
       image: Image;
       link: string;
     }
+
+    user: {
+      _id: string;
+      name: string;
+      email: string;
+      isAdmin: boolean;
+      token: string;
+    }
   }
 
   interface Variants {

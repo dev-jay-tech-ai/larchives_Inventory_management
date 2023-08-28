@@ -19,19 +19,22 @@ export const generateToken = (user: User) => {
 }
 
 export const isAuth = (req: Request, res: Response, next: NextFunction) => {
-  const { authorization } = req.headers
-  if(authorization) {
-    const token = authorization.slice(7,authorization.length) // Bearer ...
-    const decode = jwt.verify(token, process.env.JWT_SECRET || 'somethingsecret')
-    req.user = decode as {
-      _id: string
-      name: string
-      email: string
-      isAdmin: boolean
-      token: string
-    } 
-    next()
-  } else  {
-    res.status(400).json({ message: 'No Token' })
+  const { authorization } = req.headers;
+  if (authorization) {
+    const token = authorization.slice(7, authorization.length);
+    const decode = jwt.verify(
+      token,
+      process.env.JWT_SECRET || 'somethingsecret'
+    ) as {
+      _id: string;
+      name: string;
+      email: string;
+      isAdmin: boolean;
+      token: string;
+    }
+    req.user = decode;
+    next();
+  } else {
+    res.status(400).json({ message: 'No Token' });
   }
 }

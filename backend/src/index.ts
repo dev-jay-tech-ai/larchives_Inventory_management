@@ -5,7 +5,6 @@ import path from 'path'
 import mongoose from 'mongoose'
 import { userRouter } from './routers/userRouter'
 import { stockRouter } from './routers/stockRouter'
-import { seedRouter } from './routers/seedRouter'
 import { productRouter } from './routers/productRouter'
 import { dbRouter } from './routers/dbRouter'
 import { sheetRouter } from  './routers/sheetRouter'
@@ -32,7 +31,6 @@ app.get('/', (req: Request, res: Response) =>
 app.use('/api/users', userRouter)
 app.use('/api/products', productRouter)
 app.use('/api/stock', stockRouter)
-app.use('/api/seed', seedRouter)
 app.use('/api/db', dbRouter)
 app.use('/api/sheet', sheetRouter)
 

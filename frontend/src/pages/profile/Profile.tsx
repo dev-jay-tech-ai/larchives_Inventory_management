@@ -12,7 +12,7 @@ import { useUpdateProfileMutation } from '../../hooks/userHooks'
 
 const Profile = () => {
   const { state, dispatch } = useContext(Store)
-  const { userInfo, isLoading } = state
+  const { userInfo } = state
   const [file, setFile] = useState(userInfo!.file)
   const [name, setName] = useState(userInfo!.name)
   const [password, setPassword] = useState('')
@@ -21,7 +21,7 @@ const Profile = () => {
   const email = userInfo!.email
   const givenname = name.split(' ')[0]
 
-  const { mutateAsync: updateProfile } = useUpdateProfileMutation()
+  const { mutateAsync: updateProfile, isLoading } = useUpdateProfileMutation()
 
   const submitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault()
@@ -59,7 +59,7 @@ const Profile = () => {
               <Form.Label>File</Form.Label>
               <Form.Control
                 type='file'
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const selectedFile = e.target.files?.[0]
                   if(selectedFile) {
                     const maxSize = 5 * 1024 * 1024

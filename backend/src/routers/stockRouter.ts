@@ -9,7 +9,7 @@ const { SHOPIFY_API_KEY, SHOPIFY_ACCESS_TOKEN } = process.env
 
 export const stockRouter = express.Router()
 // /api/stock/
-let options = {
+const options = {
  'method' : 'GET',
  'url' : `https://${SHOPIFY_API_KEY}:${SHOPIFY_ACCESS_TOKEN}@privaeuk.myshopify.com/admin/api/2023-04/products.json?limit=250&page_info=eyJkaXJlY3Rpb24iOiJuZXh0IiwibGFzdF9pZCI6NzUwODA2NTk0MzcxMCwibGFzdF92YWx1ZSI6IldvbWVuJ3MgQWxsIE92ZXIgQ3J5c3RhbCBUcmlhbmdsZSBMb2dvIENodW5reSBMb3BwZXIifQ`,
  'headers' : {

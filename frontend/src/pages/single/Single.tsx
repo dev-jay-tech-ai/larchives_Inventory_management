@@ -24,7 +24,7 @@ const Single = () => {
   const { userId } = useParams()
   const { data: user, isLoading, error } = useGetUserQuery(userId!)
   const [ isEditMode, setIsEditMode ] = useState(false)
-  const [ editedUser, setEditedUser ] = useState<User | undefined>(null)
+  const [ editedUser, setEditedUser ] = useState<User | null>(null)
 
   const { mutateAsync: updateUser } = useUpdateUserMutation()
 
@@ -32,7 +32,7 @@ const Single = () => {
     setIsEditMode(!isEditMode)
   }
 
-  const saveHandler = async (e) => {
+  const saveHandler = async (e: React.MouseEvent) => {
     e.preventDefault()
     if (editedUser && user) {
       const data = await updateUser(editedUser)

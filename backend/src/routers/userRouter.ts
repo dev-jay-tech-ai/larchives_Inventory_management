@@ -110,7 +110,7 @@ userRouter.put('/profile',
         user.password = bcrypt.hashSync(req.body.password, 8)
       }
       const updatedUser = await user.save()
-      console.log(updatedUser)
+      // console.log(updatedUser)
       res.send({
         _id: updatedUser._id,
         name: updatedUser.name,

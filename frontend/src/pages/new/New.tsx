@@ -32,8 +32,7 @@ const New:React.FC<NewUser> = ({ inputs, title }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
 
-  const { state, dispatch }  = useContext(Store)
-  // const { UserInfo } = state
+  const { dispatch }  = useContext(Store)
 
   const { mutateAsync: adduser } = useAddUserMutation()
   const submitHandler = async (e: React.SyntheticEvent) => {

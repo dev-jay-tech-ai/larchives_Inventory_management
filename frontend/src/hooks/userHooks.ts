@@ -49,23 +49,14 @@ useMutation({
 
 export const useAddUserMutation = () =>
   useMutation({
-    mutationFn: async (formData : {
-      name: string
-      email: string
-      file: File | null
-    }) => (
+    mutationFn: async (formData : FormData) => (
       await formClient.post<UserInfo>(`api/users/adduser`,formData)   
     ).data
   }) 
 
 export const useUpdateProfileMutation = () =>
   useMutation({
-    mutationFn: async (formData : {
-      file: File | null
-      name: string
-      email: string
-      password: string
-    }) => (
+    mutationFn: async (formData : FormData) => (
         await formClient.put<UserInfo>(`api/users/profile`,formData)
       ).data
   })  

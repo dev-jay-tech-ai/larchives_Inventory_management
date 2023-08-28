@@ -55,19 +55,29 @@ const insertProducts = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 }
+interface Variants {
+  id: number;
+  title: string;
+  option: string;
+  price: number;
+  pricePurchase: number;
+  barcode: string;
+  inventory_quantity: number;
+  inventory_item_id: number;
+}
 
 const insertProduct = async (req: Request, res: Response) => {
   try {
     const dataBuffer = fs.readFileSync('products_250_5_val.json');
-    const data: Product = JSON.parse(dataBuffer.toString()).product;
-    console.log(data)
+    const data = JSON.parse(dataBuffer.toString()).product;
+    // console.log(data)
     // Loop through each product in dataJSON
     const product = await ProductModel.create({
       productId: data.id,
       title: data.title,
       image: data.image.src,
       vendor: data.vendor,
-      variants: data.variants.map((variant) => ({
+      variants: data.variants.map((variant: Variants) => ({
         variantId: variant.id,
         option: variant.title,
         price: variant.price,
@@ -107,7 +117,7 @@ const makeRequest = (link: string, target: string): Promise<void> => {
             totalProductsJSON.push(...targetArray);
           }
           const headerLink = resp.headers['link'];
-          const match = headerLink?.match(/<[^;]+\/(\w+\.json[^;]+)>;\srel="next"/);
+          const match = headerLink && headerLink[0].match(/<[^;]+\/(\w+\.json[^;]+)>;\srel="next"/);
           const nextLink = match ? 
             target === 'inventory' ? inventoryUrl + match[1] : productsUrl + match[1]
             : false;
