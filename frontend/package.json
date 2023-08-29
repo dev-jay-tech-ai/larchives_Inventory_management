@@ -21,6 +21,7 @@
     "@types/react-router-bootstrap": "^0.26.1",
     "@types/recharts": "^1.8.24",
     "@vitejs/plugin-react-swc": "^3.3.2",
+    "dotenv": "^16.3.1",
     "google-spreadsheet": "^3.3.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
