@@ -9,7 +9,7 @@ import { productRouter } from './routers/productRouter'
 import { dbRouter } from './routers/dbRouter'
 import { sheetRouter } from  './routers/sheetRouter'
  
-dotenv.config({ path: 'backend/.env' })
+dotenv.config()
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://larchives:nk3VvM8CObshAyn3@cluster0.fjaapvf.mongodb.net/larchivesdb?retryWrites=true&w=majority'
 mongoose.set('strictQuery',true)
 mongoose

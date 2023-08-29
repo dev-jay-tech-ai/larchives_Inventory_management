@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import { User } from './models/userModel'
 import { NextFunction, Request, Response } from 'express'
 
-dotenv.config({ path: 'backend/.env' })
+dotenv.config()
 export const generateToken = (user: User) => {
   return jwt.sign({
     _id: user._id,

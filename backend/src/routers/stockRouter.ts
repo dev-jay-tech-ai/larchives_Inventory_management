@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler'
 import request from 'request'
 import dotenv from 'dotenv'
 import * as fs from 'fs';
-dotenv.config({ path: 'backend/.env' })
+dotenv.config()
 
 const { SHOPIFY_API_KEY, SHOPIFY_ACCESS_TOKEN } = process.env
 
