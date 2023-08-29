@@ -67,17 +67,6 @@ const Datatable = () => {
     }
   }
 
-  const handleUpdate = async () => {
-      try {
-        // await updateProductMutation.mutateAsync(id, qty);
-        console.log('Updated!')
-        
-      } catch (err) {
-        throw getError(error as ApiError);
-      }
-   
-  }
-
   const actionColumn:GridColDef[] = [
     {
       field: "action",
@@ -112,11 +101,9 @@ const Datatable = () => {
       <div className="datatableTitle">
         Product List
         <div style={{ width: '250px', display: 'flex', justifyContent: 'space-between' }}>
-          <Link to={'/products/new'} className="link">
-          Add New
-        </Link>
-        <Button>Update</Button>
-        <Button onClick={handleSelectionDelete}>Delete</Button>
+          <Link to={'/products/new'} className="link">Add New</Link>
+          <Button>Update</Button>
+          <Button onClick={handleSelectionDelete}>Delete</Button>
         </div>
       </div>
       <div style={{ margin: '10px 0' }}>
@@ -141,7 +128,7 @@ const Datatable = () => {
       />
       }
     </div>
-  );
-};
+  )
+}
 
 export default Datatable

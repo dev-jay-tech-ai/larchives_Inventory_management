@@ -13,11 +13,8 @@ import { useContext, useEffect, useState } from "react";
 import { User } from "../../types/User";
 import { Button } from "react-bootstrap";
 import { useUpdateUserMutation } from "../../hooks/userHooks"
-import dotenv from 'dotenv'
 import { toast } from "react-toastify";
 import { Store } from '../../Store'
-
-dotenv.config()
 
 const Single = () => {
   const { dispatch } = useContext(Store)
@@ -62,8 +59,8 @@ const Single = () => {
             <h1 className="title">Information</h1> 
             <div className="item">
               <img
-                src={editedUser?.file ? process.env.REACT_APP_IMAGE_BASE_URL + editedUser.file : 
-                  user?.file ? process.env.REACT_APP_IMAGE_BASE_URL + user.file : 'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260'}
+                src={editedUser?.file ? '/images/'+ editedUser.file : 
+                  user?.file ? '/images/'+ user.file : 'https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260'}
                 alt=''
                 className="itemImg"
               />

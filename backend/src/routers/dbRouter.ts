@@ -7,11 +7,10 @@ import { Product, ProductModel } from '../models/productModel';
 import { Inventory, InventoryModel } from '../models/inventoryModel';
 dotenv.config()
 const { SHOPIFY_API_KEY, SHOPIFY_LOCATION_ID, SHOPIFY_ACCESS_TOKEN } = process.env
-
 export const dbRouter = express.Router()
 
 const totalProductsJSON:Product[] = []
-const productsUrl = 'https://${SHOPIFY_API_KEY}:${SHOPIFY_ACCESS_TOKEN}@privaeuk.myshopify.com/admin/api/2023-04/'
+const productsUrl = `https://${SHOPIFY_API_KEY}:${SHOPIFY_ACCESS_TOKEN}@privaeuk.myshopify.com/admin/api/2023-04/`
 // Use the route handler for the /insert endpoint
 const insertProducts = async (req: Request, res: Response) => {
   const options = {

@@ -20,7 +20,6 @@ import logo from '../../assets/logo.svg' // Adjust the path based on the locatio
 import { Store } from '../../Store'
 import { DarkModeContext } from "../../context/darkModeContext";
 
-
 const Sidebar = () => {
   const {
     state: { userInfo },

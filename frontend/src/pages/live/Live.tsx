@@ -14,20 +14,19 @@ import { Button } from 'react-bootstrap'
 import { useState, useRef } from 'react'
 import { csvHeaders, orgData } from '../../utils'
 import { SheetData } from "../../types/Sheet"
-import dotenv from 'dotenv'
 import { LinearProgress } from '@mui/material'
-dotenv.config()
+
 const { 
-  REACT_APP_WORKSHEET_ID_CLOTH, 
-  REACT_APP_WORKSHEET_ID_BAG,
-  REACT_APP_WORKSHEET_ID_SHOES,
-  REACT_APP_WORKSHEET_ID_WALLET,
-  REACT_APP_WORKSHEET_ID_ACC,
-  REACT_APP_WORKSHEET_ID_SCARF
-} = process.env
+  VITE_WORKSHEET_ID_CLOTH, 
+  VITE_WORKSHEET_ID_BAG,
+  VITE_WORKSHEET_ID_SHOES,
+  VITE_WORKSHEET_ID_WALLET,
+  VITE_WORKSHEET_ID_ACC,
+  VITE_WORKSHEET_ID_SCARF
+} = import.meta.env
 
 const Live = () => {
-  const [ sheetId, setSheetId ] = useState(String(REACT_APP_WORKSHEET_ID_CLOTH))
+  const [ sheetId, setSheetId ] = useState(String(VITE_WORKSHEET_ID_CLOTH))
   const [ modalIsOpen, setModalIsOpen ] = useState(false);
   const [ isLoadingSubmit, setIsLoadingSubmit ] = useState(false)
   const { mutateAsync: transferSheetData } = useSheetMutation()
@@ -91,12 +90,12 @@ const Live = () => {
         </div>
         <div className='category'>
           <Button>Total</Button>
-          <Button onClick={() => setSheetId(String(REACT_APP_WORKSHEET_ID_CLOTH))}>Clothe</Button>
-          <Button onClick={() => setSheetId(String(REACT_APP_WORKSHEET_ID_BAG))}>Bag</Button>
-          <Button onClick={() => setSheetId(String(REACT_APP_WORKSHEET_ID_SHOES))}>Shoes</Button>
-          <Button onClick={() => setSheetId(String(REACT_APP_WORKSHEET_ID_WALLET))}>Wallet</Button>
-          <Button onClick={() => setSheetId(String(REACT_APP_WORKSHEET_ID_ACC))}>Acc</Button>
-          <Button onClick={() => setSheetId(String(REACT_APP_WORKSHEET_ID_SCARF))}>Scarf</Button>
+          <Button onClick={() => setSheetId(String(VITE_WORKSHEET_ID_CLOTH))}>Clothe</Button>
+          <Button onClick={() => setSheetId(String(VITE_WORKSHEET_ID_BAG))}>Bag</Button>
+          <Button onClick={() => setSheetId(String(VITE_WORKSHEET_ID_SHOES))}>Shoes</Button>
+          <Button onClick={() => setSheetId(String(VITE_WORKSHEET_ID_WALLET))}>Wallet</Button>
+          <Button onClick={() => setSheetId(String(VITE_WORKSHEET_ID_ACC))}>Acc</Button>
+          <Button onClick={() => setSheetId(String(VITE_WORKSHEET_ID_SCARF))}>Scarf</Button>
         </div>
         {isLoading? <LoadingBox />
         : error ? <MessageBox variant='danger'>{getError(error as ApiError)}</MessageBox>
@@ -121,8 +120,8 @@ const Live = () => {
             <td>{ stockItems[index][3] }</td>
             <td>{ stockItems[index][5] }</td>
             <td>{ stockItems[index][6] }</td>
-            <td>{ sheetId===String({REACT_APP_WORKSHEET_ID_SHOES})? stockItems[index][8]:stockItems[index][7] }</td>
-            <td>{ sheetId===String({REACT_APP_WORKSHEET_ID_SHOES})? stockItems[index][9]:stockItems[index][8] }</td>
+            <td>{ sheetId===String({VITE_WORKSHEET_ID_SHOES})? stockItems[index][8]:stockItems[index][7] }</td>
+            <td>{ sheetId===String({VITE_WORKSHEET_ID_SHOES})? stockItems[index][9]:stockItems[index][8] }</td>
           </tr>
           ))}
           </tbody>

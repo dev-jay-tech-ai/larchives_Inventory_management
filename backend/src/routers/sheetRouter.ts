@@ -4,7 +4,7 @@ import { GoogleSpreadsheet } from "google-spreadsheet";
 import credential from '../lib/larchives-8db88e4b9606.json';
 import dotenv from 'dotenv'
 import { SheetModel } from '../models/sheetModel';
-dotenv.config()
+dotenv.config({ path: 'backend/.env' })
 
 // 구글 시트 조회하는 로직
 const getGoogleSheet: () => Promise<GoogleSpreadsheet> = async () => {

@@ -1,10 +1,9 @@
 import  jwt from 'jsonwebtoken'
-import env from 'dotenv'
+import dotenv from 'dotenv'
 import { User } from './models/userModel'
 import { NextFunction, Request, Response } from 'express'
 
-env.config()
-
+dotenv.config({ path: 'backend/.env' })
 export const generateToken = (user: User) => {
   return jwt.sign({
     _id: user._id,
