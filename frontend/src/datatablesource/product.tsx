@@ -11,8 +11,7 @@ export const productColumns: GridColDef[] = [
       return barcode && <div className='container'>{barcode?.map((bar: string, idx) => <div key={idx}>{bar}</div>)}</div>
     } 
   },
-  {
-    field: "title",
+  { field: "title",
     headerName: "TITLE",
     width: 300,
     renderCell: (params: CellRenderParams) => {
@@ -65,8 +64,7 @@ export const productColumns: GridColDef[] = [
       return qty && <div className='container'>{qty?.map((q: number | undefined, idx) => <div key={idx}>{q}</div>)}</div>
     }  
   },
-  {
-    field: "status",
+  { field: "status",
     headerName: "Status",
     width: 160,
     renderCell: (params: CellRenderParams) => {

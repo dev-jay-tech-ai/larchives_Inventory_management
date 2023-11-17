@@ -45,15 +45,15 @@ sheetRouter.post('/',
   asyncHandler(async (req: Request, res: Response) => {
     try {
       for (const data of req.body.data) {
-        console.log(data)
         if(data.stock_code && data.stock_code !== '') {
+          console.log(data)
           await SheetModel.findOrCreateByBarcode(data.stock_code, data)
         }
       }
-      res.status(200).json({ error: 'Impremented!' });
+      res.status(200).json({ message: 'Impremented!' });
     } catch (err) {
       console.error(err);
-      res.status(500).json({ message: 'Internal Server Error' });
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   }) 
 )
