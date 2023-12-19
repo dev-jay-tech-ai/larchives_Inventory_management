@@ -32,9 +32,6 @@ const Live = () => {
   const { mutateAsync: transferSheetData } = useSheetMutation()
   const { data: stockItems, isLoading, error } = useSheetQuery(sheetId)
   const csvLink = useRef<CSVLink & HTMLAnchorElement & { link: HTMLAnchorElement }>(null)
-  // console.log(stockItems);
-  console.log(stockItems && stockItems[0]);
-
   type ColumnMappings = {
     [key: string]: number;
   };
@@ -49,13 +46,12 @@ const Live = () => {
     else if(item.includes('판매가격')) col.price_kr = idx;
     else if(item.includes('링크')) col.link = idx;
   })
-  console.log(col);
   const submitInsertHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     try {
       if(stockItems) {
         setIsLoadingSubmit(true)
-        const data:SheetData[] = orgData(stockItems)  
+        const data:SheetData[] = orgData(stockItems?.slice(1))  
         await transferSheetData({ data }) 
         toast.success('Data transfer successful!')
       }
@@ -95,7 +91,7 @@ const Live = () => {
                   ref={csvLink}
                   target='_blank'
                 />
-                <Button style={{ backgroundColor:'#6439ff', border:'none' }} onClick={submitInsertHandler}>Insert</Button>
+                <Button style={{ backgroundColor:'#6439ff', border:'none' }} onClick={submitInsertHandler}>Insert into DB</Button>
                 <Button style={{ backgroundColor:'#6439ff', border:'none' }} onClick={()=> setModalIsOpen(false)}>X</Button>
               </div>
               <div className='bottom' style={{ marginTop: '4rem' }}>
@@ -130,25 +126,20 @@ const Live = () => {
           </tr>
         </thead>
         <tbody>
-        {stockItems?.map((stockItem, index: number) => {
-          if (index !== 0) {
-            return (
-              <tr key={index}>
-                <td>{stockItem[col.code]}</td>
-                <td>{stockItem[col.title]}</td>
-                <td>{stockItem[col.color]}</td>
-                <td>{stockItem[col.size]}</td>
-                <td>{stockItem[col.price_uk]}</td>
-                <td>{stockItem[col.qty]}</td>
-                <td>{stockItem[col.price_kr]}</td>
-                <td>{stockItem[col.link]}</td>
-              </tr>
-              );
-            }
-            return null;
-          })}
-          </tbody>
-        </table>
+        {stockItems?.slice(1).map((stockItem, index: number) => (
+          <tr key={index}>
+            <td>{stockItem[col.code]}</td>
+            <td>{stockItem[col.title]}</td>
+            <td>{stockItem[col.color]}</td>
+            <td>{stockItem[col.size]}</td>
+            <td>{stockItem[col.price_uk]}</td>
+            <td>{stockItem[col.qty]}</td>
+            <td>{stockItem[col.price_kr]}</td>
+            <td>{stockItem[col.link]}</td>
+          </tr>
+        ))}
+        </tbody>
+      </table>
       }
       </div>
     </div>  

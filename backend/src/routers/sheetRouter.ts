@@ -43,13 +43,23 @@ sheetRouter.get('/stock/:slug',
 sheetRouter.post('/',
   asyncHandler(async (req: Request, res: Response) => {
     try {
+      // Step 1: Reset all stock quantities to 0
+      await SheetModel.updateMany({}, { $set: { countInStock : 0 } });
+      /// Step 2: Iterate through req.body.data
       for (const data of req.body.data) {
-        if(data.stock_code && data.stock_code !== '') {
-          console.log(data)
-          await SheetModel.findOrCreateByBarcode(data.stock_code, data)
+        // Step 3: Check if stock_code exists and is not an empty string
+        if (data.stock_code && data.stock_code !== '') {
+          // Step 4: Update or create entry in SheetModel
+          await SheetModel.findOneAndUpdate(
+            { barcode: data.stock_code },
+            { $set: data },
+            { upsert: true, new: true }
+          );
+          console.log(data);
         }
       }
-      res.status(200).json({ message: 'Impremented!' });
+
+      res.status(200).json({ message: 'Implemented!' });
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Internal Server Error' });
