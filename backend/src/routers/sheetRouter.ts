@@ -28,11 +28,10 @@ sheetRouter.get('/stock/:slug',
       const googleSheet = await getGoogleSheet();
       const sheetsByIdElement = googleSheet.sheetsById[sheetId];
       const rows = await sheetsByIdElement.getRows();
-      // Filter out empty rows before processing the data
+      const header = await sheetsByIdElement.headerValues;
       const filteredRows = rows.filter((row) => row._rawData.length > 0);
-      const googleSheetRows = filteredRows.map((row)=> row._rawData)
-       // Print the first row's data (after filtering empty rows)
-      // Send the filteredRows or process the data as needed
+      const googleSheetRows = filteredRows.map((row)=> row._rawData);
+      googleSheetRows.unshift(header);
       res.send(googleSheetRows);
     } catch (error) {
       if(error instanceof Error) console.error('Error loading Google Spreadsheet:', error.message);

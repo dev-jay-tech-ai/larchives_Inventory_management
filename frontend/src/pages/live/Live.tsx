@@ -32,7 +32,24 @@ const Live = () => {
   const { mutateAsync: transferSheetData } = useSheetMutation()
   const { data: stockItems, isLoading, error } = useSheetQuery(sheetId)
   const csvLink = useRef<CSVLink & HTMLAnchorElement & { link: HTMLAnchorElement }>(null)
-  console.log(stockItems);
+  // console.log(stockItems);
+  console.log(stockItems && stockItems[0]);
+
+  type ColumnMappings = {
+    [key: string]: number;
+  };
+  const col:ColumnMappings = {};
+  stockItems && stockItems[0].forEach((item, idx) => {
+    if(item.includes('코드')) col.code = idx;
+    else if(item.includes('품명')) col.title = idx;
+    else if(item.includes('컬러')) col.color = idx;
+    else if(item.includes('사이즈')) col.size = idx;
+    else if(item.includes('구매')) col.price_uk = idx;
+    else if(item.trim() === '수량') col.qty = idx;
+    else if(item.includes('판매가격')) col.price_kr = idx;
+    else if(item.includes('링크')) col.link = idx;
+  })
+  console.log(col);
   const submitInsertHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     try {
@@ -105,6 +122,7 @@ const Live = () => {
             <th>Barcode</th>
             <th>Title</th>
             <th>Colour</th>
+            <th>Size</th>
             <th>Purchase Price</th>
             <th>Qty</th>
             <th>Price</th>
@@ -112,17 +130,23 @@ const Live = () => {
           </tr>
         </thead>
         <tbody>
-        {stockItems?.map((stockItem, index: number) => (
-          <tr key={index}>
-            <td>{ stockItem[1] }</td>
-            <td>{ stockItem[2] }</td>
-            <td>{ stockItem[3] }</td>
-            <td>{ stockItem[5] }</td>
-            <td>{ stockItem[6] }</td>
-            <td>{ sheetId===String({VITE_WORKSHEET_ID_SHOES})? stockItem[8]:stockItem[7] }</td>
-            <td>{ sheetId===String({VITE_WORKSHEET_ID_SHOES})? stockItem[9]:stockItem[8] }</td>
-          </tr>
-          ))}
+        {stockItems?.map((stockItem, index: number) => {
+          if (index !== 0) {
+            return (
+              <tr key={index}>
+                <td>{stockItem[col.code]}</td>
+                <td>{stockItem[col.title]}</td>
+                <td>{stockItem[col.color]}</td>
+                <td>{stockItem[col.size]}</td>
+                <td>{stockItem[col.price_uk]}</td>
+                <td>{stockItem[col.qty]}</td>
+                <td>{stockItem[col.price_kr]}</td>
+                <td>{stockItem[col.link]}</td>
+              </tr>
+              );
+            }
+            return null;
+          })}
           </tbody>
         </table>
       }
