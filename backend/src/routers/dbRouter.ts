@@ -9,9 +9,9 @@ dotenv.config()
 const { SHOPIFY_API_KEY, SHOPIFY_LOCATION_ID, SHOPIFY_ACCESS_TOKEN } = process.env
 export const dbRouter = express.Router()
 
-const totalProductsJSON:Product[] = []
+const totalProductsJSON = []
 const productsUrl = `https://${SHOPIFY_API_KEY}:${SHOPIFY_ACCESS_TOKEN}@privaeuk.myshopify.com/admin/api/2023-04/`
-// Use the route handler for the /insert endpoint
+
 const insertProducts = async (req: Request, res: Response) => {
   const options = {
     'method' : 'GET',
@@ -20,14 +20,9 @@ const insertProducts = async (req: Request, res: Response) => {
     'Content-Type': 'application/json'
     }
   }
-
   try {
     await makeRequest(options.url, 'products')
-    
-    const dataBuffer = fs.readFileSync('products_250_7.json');
-    const dataJSON: Request['ProductData'][] = JSON.parse(dataBuffer.toString()).products;
-    // Loop through each product in dataJSON
-    for (const data of dataJSON) {
+    for (const data of totalProductsJSON) {
       const product = await ProductModel.create({
         productId: data.id,
         title: data.title,
@@ -43,8 +38,6 @@ const insertProducts = async (req: Request, res: Response) => {
           inventory_quantity: variant.inventory_quantity,
         })),
       });
-
-      // Log the inserted product (optional)
       console.log('Inserted product:', product);
     }
 
@@ -54,29 +47,17 @@ const insertProducts = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 }
-interface Variants {
-  id: number;
-  title: string;
-  option: string;
-  price: number;
-  pricePurchase: number;
-  barcode: string;
-  inventory_quantity: number;
-  inventory_item_id: number;
-}
 
 const insertProduct = async (req: Request, res: Response) => {
   try {
-    const dataBuffer = fs.readFileSync('products_250_5_val.json');
+    const dataBuffer = fs.readFileSync('./src/data/products_250_5_val.json');
     const data = JSON.parse(dataBuffer.toString()).product;
-    // console.log(data)
-    // Loop through each product in dataJSON
     const product = await ProductModel.create({
       productId: data.id,
       title: data.title,
       image: data.image.src,
       vendor: data.vendor,
-      variants: data.variants.map((variant: Variants) => ({
+      variants: data.variants.map((variant: Express.Variants) => ({
         variantId: variant.id,
         option: variant.title,
         price: variant.price,
@@ -86,8 +67,6 @@ const insertProduct = async (req: Request, res: Response) => {
         inventory_quantity: variant.inventory_quantity,
       })),
     });
-
-    // Log the inserted product (optional)
     console.log('Inserted product:', product);
     res.json({ message: 'Products inserted successfully' });
   } catch (err) {
@@ -98,12 +77,33 @@ const insertProduct = async (req: Request, res: Response) => {
 const totalIventoryJSON:Inventory[] = []
 const inventoryUrl = `https://${SHOPIFY_API_KEY}:${SHOPIFY_ACCESS_TOKEN}@privaeuk.myshopify.com/admin/api/2023-04/locations/${SHOPIFY_LOCATION_ID}/`;
 
+const insertInventory = async (req: Request, res: Response) => {
+  const options = {
+    'method' : 'GET',
+    'url' : inventoryUrl + 'inventory_levels.json?limit=250',
+    'headers' : {
+    'Content-Type': 'application/json'
+    }
+  }
+  try {
+    await makeRequest(options.url, 'inventory')
+    for (const data of totalIventoryJSON) {
+      await InventoryModel.findOrCreateByItemId(data.inventory_item_id, {
+      available: data.available })
+    }
+    res.status(200).json("All inventory data fetched!");
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 const makeRequest = (link: string, target: string): Promise<void> => {
   return new Promise<void>((resolve, reject) => {
     const fetchNextLink = (nextLink: string) => {
-      console.log('다음 이동 링크', nextLink)
+      console.log('Next link...', nextLink);
       request.get(nextLink, (err, resp) => {
-        if (err) {
+        if(err) {
           reject(err); // Reject the promise if there's an error with the request
         } else {
           const responseBody = JSON.parse(resp.body);
@@ -112,11 +112,11 @@ const makeRequest = (link: string, target: string): Promise<void> => {
             targetArray = responseBody.inventory_levels;
             totalIventoryJSON.push(...targetArray);
           } else {
-            targetArray = responseBody.inventory_levels;
+            targetArray = responseBody.products; // Use the correct property name
             totalProductsJSON.push(...targetArray);
           }
           const headerLink = resp.headers['link'];
-          const match = headerLink && headerLink[0].match(/<[^;]+\/(\w+\.json[^;]+)>;\srel="next"/);
+          const match = headerLink && headerLink.match(/<[^;]+\/(\w+\.json[^;]+)>;\srel="next"/);
           const nextLink = match ? 
             target === 'inventory' ? inventoryUrl + match[1] : productsUrl + match[1]
             : false;
@@ -132,31 +132,8 @@ const makeRequest = (link: string, target: string): Promise<void> => {
   })
 }
 
-const insertInventory = async (req: Request, res: Response) => {
-  const options = {
-    'method' : 'GET',
-    'url' : inventoryUrl + 'inventory_levels.json?limit=250',
-    'headers' : {
-    'Content-Type': 'application/json'
-    }
-  }
-
-  try {
-    // Call makeRequest and wait for all the data to be fetched
-    await makeRequest(options.url, 'inventory')
-    for (const data of totalIventoryJSON) {
-      await InventoryModel.findOrCreateByItemId(data.inventory_item_id, {
-      available: data.available })
-    }
-    res.status(200).json("All inventory data fetched!");
-    // The rest of your code to insert inventory data into the database goes here
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-};
-
 // Use the route handler for the /insert endpoint
 dbRouter.get('/insert/single', asyncHandler(insertProduct));
 dbRouter.get('/insert', asyncHandler(insertProducts));
+
 dbRouter.get('/insert/shopify/inventory', asyncHandler(insertInventory));

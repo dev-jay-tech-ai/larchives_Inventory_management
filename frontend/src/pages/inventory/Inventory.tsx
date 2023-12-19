@@ -121,8 +121,8 @@ const Inventory = () => {
               <th>Colour</th>
               <th>Size</th>
               <th>Price</th>
-              <th>Price Purchase</th>
-              <th>Qty</th>
+              <th>Purchase Price</th>
+              <th>Prev Qty</th>
               <th>Shopify Qty</th>
               <th>Sheet Qty</th>
               <th>Update Date</th>
@@ -162,7 +162,7 @@ const Inventory = () => {
                   {sheetStockCount}
                   </td>
                   <td>-</td>
-                  <td><Button
+                  <td><Button className='btn-small'
                   onClick={() => {handleUpdate(variant.inventory_item_id, sheetStockCount)}}>Update</Button></td>
                 </tr>
               );

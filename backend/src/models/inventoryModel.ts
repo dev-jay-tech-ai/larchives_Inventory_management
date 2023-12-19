@@ -1,4 +1,4 @@
-import { modelOptions, prop, getModelForClass } from "@typegoose/typegoose"
+import { modelOptions, prop, getModelForClass, DocumentType } from "@typegoose/typegoose"
 
 @modelOptions({ schemaOptions: { timestamps: true } })
 export class Inventory {
@@ -10,12 +10,13 @@ export class Inventory {
 
   public static async findOrCreateByItemId(
     inventory_item_id: number,
-    data: Partial<Inventory>): Promise<Inventory> {
+    data: Partial<Inventory>): Promise<DocumentType<Inventory>> {
       const existingInventory = await InventoryModel.findOne({ inventory_item_id });
       if (existingInventory) {
         // If inventory with the given inventory_item_id exists, update it with new data
-        existingInventory.available = data.available || 0;
+        existingInventory.available = data.available || existingInventory.available;
         // Update other properties as needed
+        console.log(data)
         await existingInventory.save();
         return existingInventory;
       } else {

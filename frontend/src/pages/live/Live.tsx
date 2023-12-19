@@ -27,12 +27,12 @@ const {
 
 const Live = () => {
   const [ sheetId, setSheetId ] = useState(String(VITE_WORKSHEET_ID_CLOTH))
-  const [ modalIsOpen, setModalIsOpen ] = useState(false);
+  const [ modalIsOpen, setModalIsOpen ] = useState(false)
   const [ isLoadingSubmit, setIsLoadingSubmit ] = useState(false)
   const { mutateAsync: transferSheetData } = useSheetMutation()
   const { data: stockItems, isLoading, error } = useSheetQuery(sheetId)
   const csvLink = useRef<CSVLink & HTMLAnchorElement & { link: HTMLAnchorElement }>(null)
-
+  console.log(stockItems);
   const submitInsertHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     try {
@@ -48,7 +48,6 @@ const Live = () => {
       setIsLoadingSubmit(false)
     }
   }
-
   return (
     <div className='list'>
       <Sidebar />
@@ -72,7 +71,7 @@ const Live = () => {
                   data={stockItems?orgData(stockItems):[]} 
                   headers={csvHeaders}
                   onClick={() => {
-                    if (window.confirm('csv파일을 다운로드 받겠습니까?')) return true;
+                    if (window.confirm('Do you want to download the csv file?')) return true;
                     else return false;
                   }}
                   filename={`Export_${moment().format('YYYYMMDD')}`} // 파일명 재고관리에 따라 변경하기
@@ -115,13 +114,13 @@ const Live = () => {
         <tbody>
         {stockItems?.map((stockItem, index: number) => (
           <tr key={index}>
-            <td>{ stockItems[index][1] }</td>
-            <td>{ stockItems[index][2] }</td>
-            <td>{ stockItems[index][3] }</td>
-            <td>{ stockItems[index][5] }</td>
-            <td>{ stockItems[index][6] }</td>
-            <td>{ sheetId===String({VITE_WORKSHEET_ID_SHOES})? stockItems[index][8]:stockItems[index][7] }</td>
-            <td>{ sheetId===String({VITE_WORKSHEET_ID_SHOES})? stockItems[index][9]:stockItems[index][8] }</td>
+            <td>{ stockItem[1] }</td>
+            <td>{ stockItem[2] }</td>
+            <td>{ stockItem[3] }</td>
+            <td>{ stockItem[5] }</td>
+            <td>{ stockItem[6] }</td>
+            <td>{ sheetId===String({VITE_WORKSHEET_ID_SHOES})? stockItem[8]:stockItem[7] }</td>
+            <td>{ sheetId===String({VITE_WORKSHEET_ID_SHOES})? stockItem[9]:stockItem[8] }</td>
           </tr>
           ))}
           </tbody>

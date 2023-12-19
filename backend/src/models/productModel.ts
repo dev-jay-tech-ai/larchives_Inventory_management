@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import { modelOptions, prop, getModelForClass } from "@typegoose/typegoose";
 import { Inventory } from "./inventoryModel";
 export class Variant {
@@ -13,7 +12,7 @@ export class Variant {
   @prop({ required: false, defalut: '' })
   public barcode!: string;
   @prop({ required: true, unique: true, ref: Inventory })
-  public inventory_item_id!: Types.ObjectId;
+  public inventory_item_id!: number;
   @prop({ required: true })
   public inventory_quantity!: number;
 }

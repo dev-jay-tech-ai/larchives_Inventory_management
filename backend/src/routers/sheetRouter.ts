@@ -6,7 +6,7 @@ import dotenv from 'dotenv'
 import { SheetModel } from '../models/sheetModel';
 dotenv.config()
 
-// 구글 시트 조회하는 로직
+// Query to check Google sheets
 const getGoogleSheet: () => Promise<GoogleSpreadsheet> = async () => {
   try {
     const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_CLOTH);
@@ -15,7 +15,7 @@ const getGoogleSheet: () => Promise<GoogleSpreadsheet> = async () => {
     return doc;
   } catch (error) {
     console.error("Error loading Google Spreadsheet:", error);
-    throw error; // Rethrow the error to handle it elsewhere if needed
+    throw error; 
   }
 }
 

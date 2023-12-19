@@ -51,7 +51,7 @@ const Sidebar = () => {
           <Link to="/live" style={{ textDecoration: "none" }}>
             <li>
               <LiveTvIcon className="icon" />
-              <span>Live</span>
+              <span>Stock live</span>
             </li>
           </Link>
           <Link to="/stocks" style={{ textDecoration: "none" }}>
@@ -79,38 +79,6 @@ const Sidebar = () => {
               <span>Products</span>
             </li>
           </Link>
-          <Link to="/orders" style={{ textDecoration: "none" }}>
-            <li>
-              <CreditCardIcon className="icon" />
-              <span>Orders</span>
-            </li>
-          </Link>
-          <li>
-            <LocalShippingIcon className="icon" />
-            <span>Delivery</span>
-          </li>
-          <p className="title">USEFUL</p>
-          <li>
-            <InsertChartIcon className="icon" />
-            <span>Stats</span>
-          </li>
-          <li>
-            <NotificationsNoneIcon className="icon" />
-            <span>Notifications</span>
-          </li>
-          <p className="title">SERVICE</p>
-          <li>
-            <SettingsSystemDaydreamOutlinedIcon className="icon" />
-            <span>System Health</span>
-          </li>
-          <li>
-            <PsychologyOutlinedIcon className="icon" />
-            <span>Logs</span>
-          </li>
-          <li>
-            <SettingsApplicationsIcon className="icon" />
-            <span>Settings</span>
-          </li>
           <p className="title">USER</p>
           <li>
             <Link to="/profile" style={{ textDecoration: "none" }}>

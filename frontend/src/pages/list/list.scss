@@ -20,11 +20,16 @@
       display: flex;
       justify-content: space-between;
       margin: 1rem 20rem;
+      gap: 10px;
     }
 
     .btn-primary {
       background-color: #6439ff;
       border: none;
+    }
+
+    .btn-small {
+      font-size: 12px;
     }
   }
 }
