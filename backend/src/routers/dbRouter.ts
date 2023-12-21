@@ -3,13 +3,31 @@ import asyncHandler from 'express-async-handler'
 import request from 'request'
 import dotenv from 'dotenv'
 import * as fs from 'fs';
-import { Product, ProductModel } from '../models/productModel';
+import { ProductModel } from '../models/productModel';
 import { Inventory, InventoryModel } from '../models/inventoryModel';
 dotenv.config()
 const { SHOPIFY_API_KEY, SHOPIFY_LOCATION_ID, SHOPIFY_ACCESS_TOKEN } = process.env
 export const dbRouter = express.Router()
 
-const totalProductsJSON = []
+interface Product {
+  id: number;
+  title: string;
+  image: { src: string };
+  vendor: string;
+  variants: Variant[];
+}
+
+interface Variant {
+  id: number;
+  title: string;
+  price: number;
+  pricePurchase: number | null;
+  barcode: string;
+  inventory_item_id: number;
+  inventory_quantity: number;
+}
+
+const totalProductsJSON: Product[] = [];
 const productsUrl = `https://${SHOPIFY_API_KEY}:${SHOPIFY_ACCESS_TOKEN}@privaeuk.myshopify.com/admin/api/2023-04/`
 
 const insertProducts = async (req: Request, res: Response) => {
@@ -116,7 +134,7 @@ const makeRequest = (link: string, target: string): Promise<void> => {
             totalProductsJSON.push(...targetArray);
           }
           const headerLink = resp.headers['link'];
-          const match = headerLink && headerLink.match(/<[^;]+\/(\w+\.json[^;]+)>;\srel="next"/);
+          const match = typeof headerLink === 'string' && headerLink.length > 0 && headerLink[0].match(/<[^;]+\/(\w+\.json[^;]+)>;\srel="next"/);
           const nextLink = match ? 
             target === 'inventory' ? inventoryUrl + match[1] : productsUrl + match[1]
             : false;
