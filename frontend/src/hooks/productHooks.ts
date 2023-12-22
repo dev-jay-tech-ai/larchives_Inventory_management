@@ -43,7 +43,7 @@ export const useDeleteProductsMutation = () =>
 export const useShopifyInventoryMutation = () => 
   useMutation(
     async () => {
-      await apiClient.get('/api/db/insert/shopify/inventory');
+      await apiClient.get('/api/db/insert');
     },
     {
       onError: (error) => {
