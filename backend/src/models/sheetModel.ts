@@ -19,15 +19,11 @@ export class Sheet {
   public static async findOrCreateByBarcode(barcode: string, data: Partial<Sheet>): Promise<DocumentType<Sheet>> {
     const existingSheet = await SheetModel.findOne({ barcode })
     if (existingSheet) {
-      // Update existing sheet with new data
       existingSheet.title = data.title || existingSheet.title;
       existingSheet.color = data.color || existingSheet.color;
       existingSheet.countInStock = data.countInStock || existingSheet.countInStock;
       existingSheet.link = data.link || existingSheet.link;
-  
-      // Save the updated sheet to the database
       await existingSheet.save();
-  
       return existingSheet;
     } else return SheetModel.create({ ...data, barcode })
   }

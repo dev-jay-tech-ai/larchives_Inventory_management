@@ -36,17 +36,17 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <div className="top">
-        <Link to="/" style={{ textDecoration: "none", textAlign: 'center' }}>
-          <img src={logo} alt="Logo" className="logo" style={{ width: '80%', verticalAlign: 'middle' }} />
-        </Link>
+        <img src={logo} alt="Logo" className="logo" style={{ width: '80%', verticalAlign: 'middle' }} />
       </div>
       <div className="center">
         <ul>
           <p className="title">MAIN</p>
-          <li>
-            <DashboardIcon className="icon" />
-            <span>Dashboard</span>
-          </li>
+          <Link to="/" style={{ textDecoration: "none", textAlign: 'center' }}>
+            <li>
+              <DashboardIcon className="icon" />
+              <span>Dashboard</span>
+            </li>
+          </Link>
           <p className="title">LISTS</p>
           <Link to="/live" style={{ textDecoration: "none" }}>
             <li>

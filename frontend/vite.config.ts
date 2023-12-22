@@ -6,5 +6,5 @@ import { config as dotenvConfig } from 'dotenv'
 dotenvConfig();
 
 export default defineConfig({
-  plugins: [react()]
+  plugins: [react()],
 })

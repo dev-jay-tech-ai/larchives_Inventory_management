@@ -13,12 +13,12 @@ const Home = () =>  {
       <div className='homeContainer'>
         <Navbar />
         <div className='widgets'>
-          <Widget type='user' />
-          <Widget type='order' />
-          <Widget type='earning' />
-          <Widget type='balance' />
-          <Widget type='balance' />
-          <Widget type='balance' />
+          <Widget type='clothes' />
+          <Widget type='bags' />
+          <Widget type='shoes' />
+          <Widget type='wallets' />
+          <Widget type='accessories' />
+          <Widget type='scarf' />
         </div>
         <div className='charts'>
           <Featured />

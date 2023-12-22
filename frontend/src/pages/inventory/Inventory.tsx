@@ -135,7 +135,7 @@ const Inventory = () => {
               let option = variant.option.split(' / ');
               const inventoryAvailable = product.inventories[idx]?.available;
               const sheetStockCount = product.sheetstocks[idx]?.countInStock;
-              const isDifferent = inventoryAvailable !== sheetStockCount;
+              const isDifferent = variant.inventory_quantity !== sheetStockCount;
               return (
                 <tr key={variant.variantId}>
                   <td>
@@ -156,8 +156,8 @@ const Inventory = () => {
                   <td>{option[1]}</td>
                   <td>{variant.price}</td>
                   <td>{variant.pricePurchase}</td>
-                  <td>{variant.inventory_quantity}</td>
                   <td>{inventoryAvailable}</td>
+                  <td>{variant.inventory_quantity}</td>
                   <td className={isDifferent ? 'different-value' : ''}>
                   {sheetStockCount}
                   </td>

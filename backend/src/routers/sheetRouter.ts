@@ -44,7 +44,7 @@ sheetRouter.post('/',
   asyncHandler(async (req: Request, res: Response) => {
     try {
       // Step 1: Reset all stock quantities to 0
-      await SheetModel.updateMany({}, { $set: { countInStock : 0 } });
+      // await SheetModel.updateMany({}, { $set: { countInStock : 0 } });
       /// Step 2: Iterate through req.body.data
       for (const data of req.body.data) {
         // Step 3: Check if stock_code exists and is not an empty string

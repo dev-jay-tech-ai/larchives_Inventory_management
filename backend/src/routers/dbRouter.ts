@@ -41,12 +41,12 @@ const insertProducts = async (req: Request, res: Response) => {
   try {
     await makeRequest(options.url, 'products')
     for (const data of totalProductsJSON) {
-      const product = await ProductModel.create({
-        productId: data.id,
-        title: data.title,
-        image: data.image.src,
-        vendor: data.vendor,
-        variants: data.variants.map((variant) => ({
+      const existingProduct = await ProductModel.findOne({ productId: data.id });
+      if(existingProduct) {
+        existingProduct.title = data.title;
+        existingProduct.image = data.image.src;
+        existingProduct.vendor = data.vendor;
+        existingProduct.variants = data.variants.map((variant) => ({
           variantId: variant.id,
           option: variant.title,
           price: variant.price,
@@ -54,11 +54,29 @@ const insertProducts = async (req: Request, res: Response) => {
           barcode: variant.barcode,
           inventory_item_id: variant.inventory_item_id,
           inventory_quantity: variant.inventory_quantity,
-        })),
-      });
-      console.log('Inserted product:', product);
-    }
+        }));
 
+        const updatedProduct = await existingProduct.save();
+        console.log('Updated product:', updatedProduct);
+      } else {
+        const newProduct = await ProductModel.create({
+          productId: data.id,
+          title: data.title,
+          image: data.image.src,
+          vendor: data.vendor,
+          variants: data.variants.map((variant) => ({
+            variantId: variant.id,
+            option: variant.title,
+            price: variant.price,
+            pricePurchase: null,
+            barcode: variant.barcode,
+            inventory_item_id: variant.inventory_item_id,
+            inventory_quantity: variant.inventory_quantity,
+          })),
+        });
+        console.log('Inserted product:', newProduct);
+      }
+    }
     res.json({ message: 'Products inserted successfully' });
   } catch (err) {
     console.error('Error inserting products:', err);
@@ -134,7 +152,7 @@ const makeRequest = (link: string, target: string): Promise<void> => {
             totalProductsJSON.push(...targetArray);
           }
           const headerLink = resp.headers['link'];
-          const match = typeof headerLink === 'string' && headerLink.length > 0 && headerLink[0].match(/<[^;]+\/(\w+\.json[^;]+)>;\srel="next"/);
+          const match = typeof headerLink === 'string' && headerLink.match(/<[^;]+\/(\w+\.json[^;]+)>;\srel="next"/);
           const nextLink = match ? 
             target === 'inventory' ? inventoryUrl + match[1] : productsUrl + match[1]
             : false;

@@ -39,13 +39,13 @@ const Live = () => {
   stockItems && stockItems[0].forEach((item, idx) => {
     if (typeof item === 'string') {
       if (item.includes('코드')) col.code = idx;
-      else if (item.includes('품명')) col.title = idx;
-      else if (item.includes('컬러')) col.color = idx;
-      else if (item.includes('사이즈')) col.size = idx;
-      else if (item.includes('구매')) col.price_uk = idx;
-      else if (item.trim() === '수량') col.qty = idx;
-      else if (item.includes('판매가격')) col.price_kr = idx;
-      else if (item.includes('링크')) col.link = idx;
+      else if(item.includes('품명')) col.title = idx;
+      else if(item.includes('컬러')) col.color = idx;
+      else if(item.includes('사이즈')) col.size = idx;
+      else if(item.includes('구매')) col.price_uk = idx;
+      else if(item.trim() === '수량') col.qty = idx;
+      else if(item.includes('판매가격')) col.price_kr = idx;
+      else if(item.includes('링크')) col.link = idx;
     }
   });
   const submitInsertHandler = async (e: React.SyntheticEvent) => {
@@ -53,7 +53,7 @@ const Live = () => {
     try {
       if(stockItems) {
         setIsLoadingSubmit(true)
-        const data:SheetData[] = orgData(stockItems?.slice(1))  
+        const data:SheetData[] = orgData(stockItems);
         await transferSheetData({ data }) 
         toast.success('Data transfer successful!')
       }

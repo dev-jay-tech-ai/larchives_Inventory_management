@@ -1,9 +1,11 @@
 import "./widget.scss";
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutline";
-import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import LoyaltyOutlinedIcon from '@mui/icons-material/LoyaltyOutlined';
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
+import InterestsOutlinedIcon from '@mui/icons-material/InterestsOutlined';
+import IceSkatingOutlinedIcon from '@mui/icons-material/IceSkatingOutlined';
+import LocalMallIcon from '@mui/icons-material/LocalMall';
+import SpaIcon from '@mui/icons-material/Spa';
 
 interface  WidgetProps {
   type: string;
@@ -29,13 +31,13 @@ const Widget = ({ type }: WidgetProps) => {
   const diff = 20;
 
   switch (type) {
-    case "user":
+    case "clothes":
       data = {
-        title: "USERS",
+        title: "CLOTHES",
         isMoney: false,
-        link: "See all users",
+        link: '',
         icon: (
-          <PersonOutlinedIcon
+          <LoyaltyOutlinedIcon
             className="icon"
             style={{
               color: "crimson",
@@ -45,13 +47,26 @@ const Widget = ({ type }: WidgetProps) => {
         ),
       };
       break;
-    case "order":
+    case "bags":
       data = {
-        title: "ORDERS",
+        title: "BAGS",
         isMoney: false,
-        link: "View all orders",
+        link: '',
         icon: (
-          <ShoppingCartOutlinedIcon
+          <LocalMallIcon
+            className="icon"
+            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
+          />
+        ),
+      };
+      break;
+    case "shoes":
+      data = {
+        title: "SHOES",
+        isMoney: false,
+        link: '',
+        icon: (
+          <IceSkatingOutlinedIcon
             className="icon"
             style={{
               backgroundColor: "rgba(218, 165, 32, 0.2)",
@@ -61,25 +76,12 @@ const Widget = ({ type }: WidgetProps) => {
         ),
       };
       break;
-    case "earning":
-      data = {
-        title: "EARNINGS",
-        isMoney: true,
-        link: "View net earnings",
-        icon: (
-          <MonetizationOnOutlinedIcon
-            className="icon"
-            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
-          />
-        ),
-      };
-      break;
-    case "balance":
-      data = {
-        title: "BALANCE",
-        isMoney: true,
-        link: "See details",
-        icon: (
+      case "wallets":
+        data = {
+          title: "WALLET",
+          isMoney: false,
+          link: '',
+          icon: (
           <AccountBalanceWalletOutlinedIcon
             className="icon"
             style={{
@@ -87,9 +89,41 @@ const Widget = ({ type }: WidgetProps) => {
               color: "purple",
             }}
           />
-        ),
-      };
-      break;
+          ),
+        };
+        break;
+      case "accessories":
+        data = {
+          title: "ACCESSORIES",
+          isMoney: false,
+          link: '',
+          icon: (
+            <InterestsOutlinedIcon
+              className="icon"
+              style={{
+                backgroundColor: "rgba(62, 152, 199, 0.2)",
+                color: "blue",
+              }}
+            />
+          ),
+        };
+        break;
+      case "scarf":
+        data = {
+          title: "SCARF",
+          isMoney: true,
+          link: '',
+          icon: (
+            <SpaIcon
+              className="icon"
+              style={{
+                backgroundColor: "rgba(116, 81, 248, 0.2)",
+                color: "#7451f8",
+              }}
+            />
+          ),
+        };
+        break;
     default:
       break;
   }
@@ -111,5 +145,4 @@ const Widget = ({ type }: WidgetProps) => {
     </div>
   )
 }
-
 export default Widget
