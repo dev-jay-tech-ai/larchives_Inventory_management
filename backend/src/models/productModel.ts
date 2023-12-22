@@ -8,7 +8,7 @@ export class Variant {
   @prop({ required: true, default: 0 })
   public price!: number;
   @prop({ required: false, defalut: null })
-  public pricePurchase!: number;
+  public pricePurchase!: number | null;
   @prop({ required: false, defalut: '' })
   public barcode!: string;
   @prop({ required: true, unique: true, ref: Inventory })
